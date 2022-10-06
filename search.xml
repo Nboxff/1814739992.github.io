@@ -37,7 +37,7 @@
 <p>$\Delta w=-\eta \nabla J(w)$,其中$\eta$为学习率，表示学习速度（要适中）</p>
 <p><img src="\images\deep2.png" style="zoom:50%;" /></p>
 <p><img src="\images\deep3.png" style="zoom:50%;" /></p>
-<h3 id="多层神经网络"><a href="#多层神经网络" class="headerlink" title="多层神经网络"></a>多层神经网络</h3><p><img src="D:\Myfl\Blog\source\images\deep4.png" style="zoom:67%;" /></p>
+<h3 id="多层神经网络"><a href="#多层神经网络" class="headerlink" title="多层神经网络"></a>多层神经网络</h3><p><img src="\images\deep4.png" style="zoom:67%;" /></p>
 <ul>
 <li><strong>整体架构</strong>：输入层-隐藏层（可以包含多层）-输出层</li>
 <li>大于一层的就被称为深度神经网络，层次越多数据处理能力越强</li>
