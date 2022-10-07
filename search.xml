@@ -56,6 +56,16 @@
 </blockquote>
 <p><strong>反向传播</strong>：通过链式求导法则求代价函数对各层参数W的偏导数</p>
 <h2 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h2><p>整体架构：卷积层→Relu层→池化层→连接各层→全连接层</p>
+<h3 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h3><p>卷积结果大小计算公式：</p>
+<ul>
+<li><p>$H_{2}=\frac{H_{1}-F_{H}+2P}{S(步长)}+1$,P为边界填充的圈数</p>
+</li>
+<li><p>$W_{2}=\frac{W_{1}-F_{W}+2P}{S(步长)}+1$</p>
+</li>
+</ul>
+<h3 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h3><p><strong>MAXPOOLING</strong>:池化层的目的是压缩</p>
+<p>以K*K大小分块，每次取块中最大的元素</p>
+<p>$\begin{pmatrix}1&amp;3&amp;2&amp;9\\7&amp;4&amp;1&amp;5&amp;\\8&amp;5&amp;2&amp;3\\4&amp;2&amp;1&amp;4\end{pmatrix}→\begin{pmatrix}7&amp;9\\8&amp;4 \end{pmatrix}$</p>
 ]]></content>
       <tags>
         <tag>深度学习</tag>
@@ -263,7 +273,23 @@
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$x</span> = <span class="keyword">array</span>(<span class="number">1</span>=&gt;<span class="string">&quot;Google&quot;</span>, <span class="number">2</span>=&gt;<span class="string">&quot;Baidu&quot;</span>, <span class="number">3</span>=&gt;<span class="string">&quot;Bing&quot;</span>);</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$x</span> <span class="keyword">as</span> <span class="variable">$key</span> =&gt; <span class="variable">$value</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;key  为 &quot;</span> . <span class="variable">$key</span> . <span class="string">&quot;，对应的 value 为 &quot;</span>. <span class="variable">$value</span> . PHP_EOL;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h5 id="While-Do-While"><a href="#While-Do-While" class="headerlink" title="While/Do While"></a>While/Do While</h5><p>In php, <code>while</code> and <code>do while</code> are the same as that in C/C++.</p>
 <p><strong>Format:<code>while(condition)&#123;// some codes&#125;</code></strong></p>
-<h4 id="Array-1"><a href="#Array-1" class="headerlink" title="Array"></a>Array</h4><h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>To be continued…</p>
+<h4 id="Array-1"><a href="#Array-1" class="headerlink" title="Array"></a>Array</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$s</span> = <span class="keyword">array</span>(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;abc&quot;</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">count</span>(<span class="variable">$s</span>); <span class="comment">// count() return the length of array</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Key-value</strong>:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$age</span> = <span class="keyword">array</span>(<span class="string">&quot;Mike&quot;</span> =&gt; <span class="string">&quot;35&quot;</span>, <span class="string">&quot;Amy&quot;</span>=&gt;<span class="string">&quot;37&quot;</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;Mike is &quot;</span>. <span class="variable">$age</span>[<span class="string">&#x27;Mike&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h4><p>example:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$s</span> = <span class="keyword">array</span>(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;abc&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">sort</span>(<span class="variable">$s</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>sort()</code>:对数组升序排列</li>
+<li><code>rsort()</code>: 对数组降序排列</li>
+<li><code>ksort()</code> : 根据关联数组的键，对数组升序排列</li>
+<li><code>asort()</code> :根据关联数组的值，对数组升序排列</li>
+<li><code>krsort()</code>:根据关联数组的键，对数组降序排列</li>
+<li><code>arsort()</code> :根据关联数组的值，对数组降序排列</li>
+</ul>
+<h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p><strong>Format</strong></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">functionName</span>(<span class="params"><span class="variable">$a</span>, <span class="variable">$b</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$total</span> = <span class="variable">$a</span> + <span class="variable">$b</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$total</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>php function uses <code>return</code> to return value</p>
 ]]></content>
       <tags>
         <tag>编程语言</tag>
