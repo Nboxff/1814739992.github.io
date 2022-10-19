@@ -450,6 +450,9 @@
 </table>
 </div>
 <p><strong>注意</strong>：dl标签中只允许包含dt/dd标签，dt/dd标签中可以包含任意内容</p>
+<blockquote>
+<p>在CSS中，<code>list-style: none;</code>可去除li前面的小圆点</p>
+</blockquote>
 <h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><h5 id="建立表格"><a href="#建立表格" class="headerlink" title="建立表格"></a>建立表格</h5><div class="table-container">
 <table>
 <thead>
@@ -1151,6 +1154,7 @@
 </ol>
 <h5 id="层叠性"><a href="#层叠性" class="headerlink" title="层叠性"></a>层叠性</h5><p>属性层层叠加（不同属性）或覆盖（相同属性）</p>
 <p>只用选择器优先级相同时，才通过层叠性判断结果</p>
+<hr>
 <h3 id="CSS盒子模型"><a href="#CSS盒子模型" class="headerlink" title="CSS盒子模型"></a>CSS盒子模型</h3><h4 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h4><p>优先级高的选择器样式会覆盖优先级低选择器样式</p>
 <p>优先级：</p>
 <p><code>继承 &lt; 通配符选择器 &lt; 标签选择器 &lt; 类选择器 &lt; id选择器 &lt; 行内样式 &lt;!important</code></p>
@@ -1195,6 +1199,99 @@
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>版心：网页的有效内容，一般居中</p>
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br></pre></td></tr></table></figure>
+<p><strong>外间距的合并现象</strong>：</p>
+<p>垂直布局的块级元素，上下的margin会合并，最终两者距离为margin的最大值</p>
+<p><strong>外间距的塌陷现象</strong>：</p>
+<p>互相嵌套的块级元素，子元素的margin-top会作用在父元素上</p>
+<ul>
+<li>可以改为设置父元素的padding-top</li>
+<li>也可以给父元素设置overflow: hidden</li>
+</ul>
+<p>注意：无法用padding和margin修改行内元素的位置，可以使用line-height</p>
+<hr>
+<h3 id="CSS浮动"><a href="#CSS浮动" class="headerlink" title="CSS浮动"></a>CSS浮动</h3><h4 id="结构伪类选择器"><a href="#结构伪类选择器" class="headerlink" title="结构伪类选择器"></a>结构伪类选择器</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E:first-child {}</td>
+<td>匹配父元素中的第一个子元素，并且是E元素</td>
+</tr>
+<tr>
+<td>E:last-child {}</td>
+<td>匹配父元素中的最后一个子元素，并且是E元素</td>
+</tr>
+<tr>
+<td>E:nth-child(n) {}</td>
+<td>匹配父元素中的第n个子元素，并且是E元素</td>
+</tr>
+<tr>
+<td>E:nth-last-child(n) {}</td>
+<td>匹配父元素中的倒数第n个子元素，并且是E元素</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>括号中的n还可以填<code>even</code>、<code>odd</code>、<code>2n</code>、<code>4n</code></p>
+<ul>
+<li>-n+3表示前3个，n+3表示从第3个后开始</li>
+</ul>
+<h4 id="伪元素"><a href="#伪元素" class="headerlink" title="伪元素"></a>伪元素</h4><p>一般网页中的非主体元素可以使用伪元素，伪元素是由CSS模拟出的标签效果</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>伪元素</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>::before</code></td>
+<td>在父元素内容的最前添加一个伪元素</td>
+</tr>
+<tr>
+<td><code>::after</code></td>
+<td>在父元素内容的最后添加一个伪元素</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意必须要加content，默认是行内标签，使用示例：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.father</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="string">&#x27;内容&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="标准流"><a href="#标准流" class="headerlink" title="标准流"></a>标准流</h4><p>规则：</p>
+<ol>
+<li>块级元素：从上往下，垂直布局，独占一行</li>
+<li>行内元素或行内块元素：从左往右，水平布局，空间不够自动折行</li>
+</ol>
+<h4 id="浮动"><a href="#浮动" class="headerlink" title="浮动"></a>浮动</h4><p>浏览器解析行内块或行内标签时，浏览器会产生一个空格的距离</p>
+<p><strong>图文环绕</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">img</span> &#123;</span><br><span class="line">    <span class="attribute">float</span>: left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>块布局</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.one</span> &#123;</span><br><span class="line">    <span class="attribute">float</span>: left;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.two</span> &#123;</span><br><span class="line">    <span class="attribute">float</span>: right;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*两个div会在同一行显示，并一个在最左，一个在最右*/</span></span><br></pre></td></tr></table></figure>
+<p><strong>浮动的特点：</strong></p>
+<ol>
+<li>浮动元素会脱离标准流，在标准流中不占位置</li>
+<li>浮动元素比标准流高半个级别，可以覆盖标准流中的元素</li>
+<li>浮动找浮动，下一个浮动元素会在上一个浮动元素后面左右浮动</li>
+<li>浮动标签具备行内块特点</li>
+<li>浮动的元素不能通过<code>text-align:center</code>或者<code>margin: 0 auto</code></li>
+</ol>
+<p><strong>清除浮动：</strong></p>
+<p>直接给父元素设置overflow: hidden</p>
+<h4 id="CSS书写顺序"><a href="#CSS书写顺序" class="headerlink" title="CSS书写顺序"></a>CSS书写顺序</h4><ol>
+<li>浮动 / display</li>
+<li>盒子模型相关属性：margin border padding 宽高背景色</li>
+<li>文字样式</li>
+</ol>
+<blockquote>
+<p>按照这样的顺序写，这样浏览器的执行顺序更快</p>
+</blockquote>
 <h2 id="快速开发指南"><a href="#快速开发指南" class="headerlink" title="快速开发指南"></a>快速开发指南</h2><h3 id="VScode"><a href="#VScode" class="headerlink" title="VScode"></a>VScode</h3><h4 id="emmet语法"><a href="#emmet语法" class="headerlink" title="emmet语法"></a>emmet语法</h4><div class="table-container">
 <table>
 <thead>
