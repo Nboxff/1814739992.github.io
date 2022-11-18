@@ -43,7 +43,7 @@
   <entry>
     <title>PHP学习笔记</title>
     <url>/2022/10/02/PHPNotes/</url>
-    <content><![CDATA[<h1 id="PHP学习笔记（持续更新中…）"><a href="#PHP学习笔记（持续更新中…）" class="headerlink" title="PHP学习笔记（持续更新中…）"></a>PHP学习笔记（持续更新中…）</h1><h2 id="PHP-Basic-Rules"><a href="#PHP-Basic-Rules" class="headerlink" title="PHP Basic Rules"></a>PHP Basic Rules</h2><p>PHP文件默认的文件拓展名<code>.php</code></p>
+    <content><![CDATA[<h1 id="PHP学习笔记（暂时先不更了…）"><a href="#PHP学习笔记（暂时先不更了…）" class="headerlink" title="PHP学习笔记（暂时先不更了…）"></a>PHP学习笔记（暂时先不更了…）</h1><h2 id="PHP-Basic-Rules"><a href="#PHP-Basic-Rules" class="headerlink" title="PHP Basic Rules"></a>PHP Basic Rules</h2><p>PHP文件默认的文件拓展名<code>.php</code></p>
 <h4 id="The-first-PHP-examle"><a href="#The-first-PHP-examle" class="headerlink" title="The first PHP examle"></a>The first PHP examle</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;My first PHP page&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">echo &quot;Hello World!&quot;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>The function is to print “Hello World!” to Browser.<strong>Each line ends with <code>;</code></strong></p>
@@ -176,9 +176,9 @@
       </tags>
   </entry>
   <entry>
-    <title>前端学习笔记</title>
+    <title>HTML+CSSNotes</title>
     <url>/2022/10/17/HtmlandCss/</url>
-    <content><![CDATA[<h1 id="前端入门笔记（Html-Css）"><a href="#前端入门笔记（Html-Css）" class="headerlink" title="前端入门笔记（Html+Css）"></a>前端入门笔记（Html+Css）</h1><h2 id="HTML基础"><a href="#HTML基础" class="headerlink" title="HTML基础"></a>HTML基础</h2><h3 id="Web标准"><a href="#Web标准" class="headerlink" title="Web标准"></a>Web标准</h3><div class="table-container">
+    <content><![CDATA[<h1 id="HTML-CSS-Notes"><a href="#HTML-CSS-Notes" class="headerlink" title="HTML+CSS Notes"></a>HTML+CSS Notes</h1><h2 id="HTML基础"><a href="#HTML基础" class="headerlink" title="HTML基础"></a>HTML基础</h2><h3 id="Web标准"><a href="#Web标准" class="headerlink" title="Web标准"></a>Web标准</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1292,6 +1292,230 @@
 <blockquote>
 <p>按照这样的顺序写，这样浏览器的执行顺序更快</p>
 </blockquote>
+<h3 id="CSS定位装饰"><a href="#CSS定位装饰" class="headerlink" title="CSS定位装饰"></a>CSS定位装饰</h3><p>三种布局方式：标准流、浮动、定位</p>
+<h4 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h4><ol>
+<li>可以让元素自由地摆放在网页的任意位置</li>
+<li>一般用于 <strong>盒子之间的层叠情况</strong>， 也可以让盒子始终固定在屏幕中的某个位置</li>
+</ol>
+<p><strong>设置定位方式</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>定位方式</th>
+<th>属性值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>相对定位</td>
+<td>relative</td>
+</tr>
+<tr>
+<td>绝对定位</td>
+<td>absolute</td>
+</tr>
+<tr>
+<td>固定定位</td>
+<td>fixed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>设置偏移值</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>属性名</th>
+<th>属性值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>水平</td>
+<td>left</td>
+<td>数字+px</td>
+<td>距离左边的距离</td>
+</tr>
+<tr>
+<td>水平</td>
+<td>right</td>
+<td>数字+px</td>
+<td>距离右边的距离</td>
+</tr>
+<tr>
+<td>垂直</td>
+<td>top</td>
+<td>数字+px</td>
+<td>距离上边的距离</td>
+</tr>
+<tr>
+<td>垂直</td>
+<td>bottom</td>
+<td>数字+px</td>
+<td>距离下边的距离</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="相对定位"><a href="#相对定位" class="headerlink" title="相对定位"></a>相对定位</h5><p>相对定位：<u>相对于自己之前的位置</u>进行移动</p>
+<p><code>postion:relative;</code></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    postion:relative;</span><br><span class="line">    <span class="attribute">left</span>:<span class="number">100px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ol>
+<li>占有原来的位置，没有脱标（标准流）</li>
+<li>仍然具有标签原有的显示模式</li>
+<li>如果由多个属性，以left与top为准</li>
+</ol>
+<h5 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h5><p>绝对定位：相对于非静态定位的父元素进行定位移动</p>
+<p><code>postion:absolute;</code></p>
+<p>有父级但父级元素没有定位，以浏览器窗口为参照进行定位。</p>
+<p>注意：</p>
+<ol>
+<li>不占有原有的位置，脱标</li>
+<li><strong>一般子级用绝对定位，父级用相对定位</strong></li>
+<li>绝对定位的盒子不能使用margin: auto实现左右居中</li>
+<li>绝对定位的盒子显示模式具备行内块的特点，加宽度高度生效，若无宽高，则为0</li>
+</ol>
+<p>参考代码</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> <span class="selector-class">.content</span> <span class="selector-tag">li</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.box</span> <span class="selector-class">.content</span> <span class="selector-tag">li</span> <span class="selector-class">.hot</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">right</span>: -<span class="number">4px</span>;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">4px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="实现居中效果"><a href="#实现居中效果" class="headerlink" title="实现居中效果"></a>实现居中效果</h5><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">150px</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>提高可修改性</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.box</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">    <span class="comment">/*位移，移动自己的50%*/</span></span><br><span class="line">    <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="固定定位"><a href="#固定定位" class="headerlink" title="固定定位"></a>固定定位</h5><p>固定定位：相对于浏览器进行定位移动</p>
+<p>代码：<code>position: fixed;</code></p>
+<p>脱标，不占位置，具备行内块特点</p>
+<h4 id="元素层级关系"><a href="#元素层级关系" class="headerlink" title="元素层级关系"></a>元素层级关系</h4><ul>
+<li><p>标准流 &lt; 浮动 &lt; 定位</p>
+</li>
+<li><p>默认情况下，定位的盒子后来者居上</p>
+</li>
+<li><p><code>z-index</code>整数，取值越大显示顺序越靠上，默认值为0</p>
+</li>
+</ul>
+<h4 id="装饰"><a href="#装饰" class="headerlink" title="装饰"></a>装饰</h4><h5 id="vertival-align"><a href="#vertival-align" class="headerlink" title="vertival-align"></a>vertival-align</h5><p>属性名：vertival-align</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>baseline</td>
+<td>默认，基线对齐</td>
+</tr>
+<tr>
+<td>top</td>
+<td>顶部对齐</td>
+</tr>
+<tr>
+<td>middle</td>
+<td>中部对齐</td>
+</tr>
+<tr>
+<td>bottom</td>
+<td>底部对齐</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>浏览器遇到行内和行内块标签当作文字处理，默认文字按基线对齐</p>
+<h5 id="光标类型"><a href="#光标类型" class="headerlink" title="光标类型"></a>光标类型</h5><p>属性名：cursor</p>
+<p>设置鼠标光标在元素上时显示的样式</p>
+<p>常见属性值：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default</td>
+<td>默认值，通常时箭头</td>
+</tr>
+<tr>
+<td>pointer</td>
+<td>小手效果，提示用户可以点击</td>
+</tr>
+<tr>
+<td>text</td>
+<td>工字型，提示用户可以选择文字</td>
+</tr>
+<tr>
+<td>move</td>
+<td>十字光标，提示用户可以移动</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="圆角边框"><a href="#圆角边框" class="headerlink" title="圆角边框"></a>圆角边框</h5><p>属性名：border-radius</p>
+<p>常见取值：数字+px， 百分比</p>
+<p><strong>赋值规则：从左上角开始顺时针赋值，没有赋值的看对角</strong></p>
+<p>一个值表示四个角相同</p>
+<p>应用：</p>
+<ol>
+<li>画一个正圆<ul>
+<li>盒子必须是正方形</li>
+<li>设置边框圆角为盒子宽高的一半<code>border-radius:50%</code></li>
+</ul>
+</li>
+<li>胶囊按钮<ul>
+<li>盒子要求是长方形</li>
+<li>设置边框圆角为盒子高度的一半</li>
+</ul>
+</li>
+</ol>
+<h5 id="溢出部分显示效果"><a href="#溢出部分显示效果" class="headerlink" title="溢出部分显示效果"></a>溢出部分显示效果</h5><p>溢出部分指盒子内容部分超出盒子范围的区域</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visble</td>
+<td>默认值，溢出部分可见</td>
+</tr>
+<tr>
+<td>hidden</td>
+<td>溢出部分隐藏</td>
+</tr>
+<tr>
+<td>scroll</td>
+<td>无论是否溢出，都显示滚动条</td>
+</tr>
+<tr>
+<td>auto</td>
+<td>根据是否溢出，自动显示或隐藏滚动条</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="元素本身的隐藏"><a href="#元素本身的隐藏" class="headerlink" title="元素本身的隐藏"></a>元素本身的隐藏</h5><ul>
+<li><p><code>visibility:hidden</code>占位隐藏</p>
+</li>
+<li><p><code>display: none</code>一般用这个，<strong>不占位隐藏</strong></p>
+</li>
+</ul>
+<h5 id="元素整体透明度"><a href="#元素整体透明度" class="headerlink" title="元素整体透明度"></a>元素整体透明度</h5><p>属性名：opacity</p>
+<ul>
+<li><p>1为完全不透明</p>
+</li>
+<li><p>0为完全透明</p>
+</li>
+</ul>
 <h2 id="快速开发指南"><a href="#快速开发指南" class="headerlink" title="快速开发指南"></a>快速开发指南</h2><h3 id="VScode"><a href="#VScode" class="headerlink" title="VScode"></a>VScode</h3><h4 id="emmet语法"><a href="#emmet语法" class="headerlink" title="emmet语法"></a>emmet语法</h4><div class="table-container">
 <table>
 <thead>
@@ -1461,6 +1685,48 @@
 <p>我还得继续努力，多参与活动与比赛，积极向党组织靠拢。</p>
 <p>（花旗杯、微信小程序应用开发赛等我得考虑考虑了）</p>
 <p><img src="/images/picture1.jpg" alt="picture1"></p>
+]]></content>
+      <tags>
+        <tag>学校生活</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2022科协第一次内训</title>
+    <url>/2022/11/18/njuseSAT-1/</url>
+    <content><![CDATA[<p>2022年10月30日，软件学院科协赛事部向新成员们举办了第一次内训。在本次内训中，我作为分享人向科协赛事部的成员分享“举办算法比赛”相关的知识和技术，提高成员对算法比赛的兴趣，让成员熟悉云服务器的基本操作。</p>
+<p>遗憾的是，由于疫情影响，本次内训活动线上进行。（感觉自己语速还是太快了，前几页PPT因为直播问题卡住了迟迟没有发现，TAT）</p>
+<h3 id="活动流程"><a href="#活动流程" class="headerlink" title="活动流程"></a>活动流程</h3><h4 id="第一阶段——关于“如何举办一场算法比赛”的分享"><a href="#第一阶段——关于“如何举办一场算法比赛”的分享" class="headerlink" title="第一阶段——关于“如何举办一场算法比赛”的分享"></a>第一阶段——关于“如何举办一场算法比赛”的分享</h4><ol>
+<li><p>介绍常见的算法比赛机制</p>
+<p><img src="\images\image-20221118095921835.png" alt="image-20221118095921835" style="zoom:80%;" /></p>
+<p><img src="\images\image-20221118095945775.png" alt="image-20221118095945775" style="zoom:80%;" /></p>
+</li>
+<li><p>介绍如何评测代码</p>
+<p><img src="\images\image-20221118095747533.png" alt="image-20221118095747533" style="zoom: 50%;" /></p>
+<span id="more"></span>
+</li>
+<li><p>讲解生成测试用例</p>
+<p><img src="\images\image-20221118100008071.png" alt="image-20221118100008071" style="zoom:67%;" /></p>
+</li>
+<li><p>介绍如何部署UOJ</p>
+<p><img src="\images\image-20221118095845579.png" alt="image-20221118095845579" style="zoom: 80%;" /></p>
+</li>
+<li><p>介绍比赛管理相关要求：报名统计、签到、发奖、成绩统计。</p>
+</li>
+<li><p>讨论接下来的比赛形式</p>
+<p><strong>请期待我们的“C位出道”程序设计与应用大赛！</strong></p>
+</li>
+</ol>
+<h4 id="第二阶段——云服务器基本操作实验"><a href="#第二阶段——云服务器基本操作实验" class="headerlink" title="第二阶段——云服务器基本操作实验"></a>第二阶段——云服务器基本操作实验</h4><p>本实验在分享结束后的一周内进行，每人安排一天的时间,在我们提供的云服务器尝试部署UOJ。</p>
+<p>（每天要重装一遍服务器，有两天忘了及时重装~）</p>
+<p><strong>实验任务表</strong></p>
+<ol>
+<li>下载并安装Putty</li>
+<li>登录云服务器，熟悉Linux基本操作</li>
+<li>阅读《UOJ部署指北》<a href="https://universaloj.github.io/">首页 - UOJ部署指北 (universaloj.github.io)</a>，部署UOJ，并在网页中成功打开</li>
+<li>向UOJ中上传一道A+B问题，自行生成5个以上的测试数据</li>
+</ol>
+<h3 id="活动反馈"><a href="#活动反馈" class="headerlink" title="活动反馈"></a>活动反馈</h3><p>部员全员参加内训，均完成了实验，对docker也有了初步的认识。</p>
+<p>（自我感觉这次的选题还不错）</p>
 ]]></content>
       <tags>
         <tag>学校生活</tag>
