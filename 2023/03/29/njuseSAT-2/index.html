@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nboxff.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="写在前面2023年3月26日，软件学院科协赛事部在EL大赛策划会议后举行了第二次内训。本次内训如愿线下举行，内容轻松愉快，讲述了如何将二进制运用到程序设计之中。算是一次成功的MINI内训。 回顾位运算    符号 描述 运算规则     &amp; 与 两个位都为1时，结果才为1    或 两个位都为0时，结果才为0   ^ 异或 两个位相同为0，相异为1   ~ 取反 0变1，1变0   &amp;lt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023科协第二次MINI内训">
+<meta property="og:url" content="http://nboxff.cn/2023/03/29/njuseSAT-2/index.html">
+<meta property="og:site_name" content="Nboxff&#39;s Blog">
+<meta property="og:description" content="写在前面2023年3月26日，软件学院科协赛事部在EL大赛策划会议后举行了第二次内训。本次内训如愿线下举行，内容轻松愉快，讲述了如何将二进制运用到程序设计之中。算是一次成功的MINI内训。 回顾位运算    符号 描述 运算规则     &amp; 与 两个位都为1时，结果才为1    或 两个位都为0时，结果才为0   ^ 异或 两个位相同为0，相异为1   ~ 取反 0变1，1变0   &amp;lt">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2023/03/29/ppgA6kn.png">
+<meta property="article:published_time" content="2023-03-29T12:27:40.000Z">
+<meta property="article:modified_time" content="2023-03-29T13:04:36.779Z">
+<meta property="article:author" content="Bofan Xie">
+<meta property="article:tag" content="学校生活">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2023/03/29/ppgA6kn.png">
+
+
+<link rel="canonical" href="http://nboxff.cn/2023/03/29/njuseSAT-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://nboxff.cn/2023/03/29/njuseSAT-2/","path":"2023/03/29/njuseSAT-2/","title":"2023科协第二次MINI内训"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2023科协第二次MINI内训 | Nboxff's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Nboxff's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，记录生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">回顾位运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">一些简单的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%BB%8D%E7%84%B6%E6%98%AF%E4%B8%80%E4%B8%AAeasy%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">这仍然是一个easy的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%B9%82%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">快速幂算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E6%80%9D%E6%83%B3"><span class="nav-number">5.1.</span> <span class="nav-text">分治思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%86%E8%A7%A3"><span class="nav-number">5.2.</span> <span class="nav-text">二进制分解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%8E%8B%E7%BC%A9"><span class="nav-number">6.</span> <span class="nav-text">状态压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">6.1.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B"><span class="nav-number">7.</span> <span class="nav-text">改进</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Bofan Xie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ydjsir.com.cn/" title="https:&#x2F;&#x2F;ydjsir.com.cn&#x2F;" rel="noopener" target="_blank">YDJSIR</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://150.158.147.166/" title="http:&#x2F;&#x2F;150.158.147.166&#x2F;" rel="noopener" target="_blank">Nboxff'sOJ</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://quas-modo.github.io/" title="http:&#x2F;&#x2F;quas-modo.github.io" rel="noopener" target="_blank">quas-modo</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://daniel020605.github.io/" title="http:&#x2F;&#x2F;Daniel020605.github.io" rel="noopener" target="_blank">Daniel</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://nboxff.cn/2023/03/29/njuseSAT-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Bofan Xie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2023科协第二次MINI内训 | Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2023科协第二次MINI内训
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-03-29 20:27:40 / 修改时间：21:04:36" itemprop="dateCreated datePublished" datetime="2023-03-29T20:27:40+08:00">2023-03-29</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/03/29/njuseSAT-2/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/03/29/njuseSAT-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>2023年3月26日，软件学院科协赛事部在EL大赛策划会议后举行了第二次内训。本次内训如愿线下举行，内容轻松愉快，讲述了如何将二进制运用到程序设计之中。算是一次成功的MINI内训。</p>
+<h3 id="回顾位运算"><a href="#回顾位运算" class="headerlink" title="回顾位运算"></a>回顾位运算</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>符号</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>运算规则</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;</code></td>
+<td>与</td>
+<td>两个位都为1时，结果才为1</td>
+</tr>
+<tr>
+<td></td>
+<td>或</td>
+<td>两个位都为0时，结果才为0</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>异或</td>
+<td>两个位相同为0，相异为1</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>取反</td>
+<td>0变1，1变0</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>左移</td>
+<td>各二进位全部左移若干位，高位丢弃，低位补0</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>右移</td>
+<td>各二进位全部右移若干位</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span id="more"></span>
+<h3 id="一些简单的例子"><a href="#一些简单的例子" class="headerlink" title="一些简单的例子"></a>一些简单的例子</h3><ol>
+<li><p>用位运算判断一个数是否是奇数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x &amp; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;x is odd.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>取出二进制数的倒数第$k$位</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x &gt;&gt; (k - <span class="number">1</span>)) &amp; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将一个<strong>整数</strong>乘以$2^k$</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x &lt;&lt;= k;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="这仍然是一个easy的问题"><a href="#这仍然是一个easy的问题" class="headerlink" title="这仍然是一个easy的问题"></a>这仍然是一个easy的问题</h3><p> 二进制以字符串的形式描述</p>
+<p> （1）将一个二进制数转化为十进制数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> num = <span class="number">0</span>; </span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">     num = (num &lt;&lt; <span class="number">1</span>) | (s[i] - <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> （2）将一个十进制数转化为二进制数</p>
+<blockquote>
+<p>重要思想： 其实数在计算机内本来就是二进制的，所以十进制数转化为二进制数就是依次取出二进制数的倒数第$k$位</p>
+</blockquote>
+<hr>
+<h3 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a>快速幂算法</h3><p>问题：如何快速求解$x^p$ 或$x^p$ mod r的值</p>
+<ul>
+<li><p>在$O(n)$的时间内求解这个问题应该不是什么难事</p>
+</li>
+<li><p>能否在$O(log n)$的时间内求解这个问题</p>
+</li>
+</ul>
+<h4 id="分治思想"><a href="#分治思想" class="headerlink" title="分治思想"></a>分治思想</h4><ul>
+<li><p>当p 为偶数时， $n^p = (n^{p/2})^2$</p>
+</li>
+<li><p>当p 为奇数时呢？ $p -1$ 是偶数</p>
+</li>
+</ul>
+<p>我们可以写<strong>递归</strong>函数解决</p>
+<h4 id="二进制分解"><a href="#二进制分解" class="headerlink" title="二进制分解"></a>二进制分解</h4><p> 能否不用递归？</p>
+<p> 以求$x^{21}$ 为例：$(21)_{10}=(10101)_2$ </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$x^{16}$</th>
+<th>$x^{8}$</th>
+<th>$x^{4}$</th>
+<th>$x^{2}$</th>
+<th>$x^{1}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每一位</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+21 = 16 + 4 + 1</script><script type="math/tex; mode=display">
+x^{21} = x^{16} * x^4 * x^1</script><p><img src="https://s1.ax1x.com/2023/03/29/ppgA6kn.png" alt="ppgA6kn.png"></p>
+<p><strong>Python参考代码</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fast_pow</span>(<span class="params">x, p</span>):</span><br><span class="line">    ans = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> p &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">if</span> p &amp; <span class="number">1</span> == <span class="number">1</span>:</span><br><span class="line">            ans = ans * x</span><br><span class="line">        x = x * x</span><br><span class="line">        p &gt;&gt;= <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line">x, p = [<span class="built_in">int</span>(t) <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">input</span>().split()]</span><br><span class="line"><span class="built_in">print</span>(fast_pow(x, p))</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="状态压缩"><a href="#状态压缩" class="headerlink" title="状态压缩"></a>状态压缩</h3><p> <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">P2040 </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">打开所有的灯 </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">- </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">洛谷 </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">| </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">计算机科学教育新生态 </a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2040">(luogu.com.cn)</a></p>
+<p> <strong>题目描述</strong></p>
+<p> 这个灯很奇怪，点一下就会将这个灯和其周围四盏灯的<strong>开关状态全部改变</strong>。现在你的任务就是就是求要打开全部这些灯最少需要点几下。</p>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0  1  1</span><br><span class="line">1  0  0</span><br><span class="line">1  0  1</span><br></pre></td></tr></table></figure>
+<p>点一下最中间的灯【2,2】就变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0  0  1</span><br><span class="line">0  1  1</span><br><span class="line">1  1  1</span><br></pre></td></tr></table></figure>
+<p>再点一下左上角的灯【1,1】就变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1  1  1</span><br><span class="line">1  1  1</span><br><span class="line">1  1  1</span><br></pre></td></tr></table></figure>
+<p>达成目标。最少需要2步。</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p><del>像极了洛克王国打幽系徽章玩的小游戏</del></p>
+<ul>
+<li>一个灯点1次和点3的效果是一样的</li>
+<li>那么我们是不是可以<strong>枚举</strong>每个灯的状态</li>
+<li>每个灯就是一个0或者1</li>
+<li>可以用<strong>9位的二进制数（0~511）</strong>描述所有操作组合</li>
+</ul>
+<p><strong>C语言参考代码</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> a[<span class="number">5</span>][<span class="number">5</span>], b[<span class="number">5</span>][<span class="number">5</span>];</span><br><span class="line"><span class="type">int</span> ans = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">check</span><span class="params">()</span> &#123; <span class="comment">// 检查灯是否已经全部打开</span></span><br><span class="line">    <span class="type">int</span> sum=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span> ;i &lt;= <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= <span class="number">3</span>; j++) &#123;</span><br><span class="line">            sum += b[i][j];</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (sum == <span class="number">9</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i &lt;= <span class="number">3</span>;i++)</span><br><span class="line">      <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>;j &lt;= <span class="number">3</span>;j++)</span><br><span class="line">          <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; <span class="number">9</span>); i++) &#123;      <span class="comment">// 从0 ~ 2 ^ 9 - 1枚举</span></span><br><span class="line">  	  <span class="type">int</span> j = i;  </span><br><span class="line">      <span class="type">int</span> count = <span class="number">0</span>;   </span><br><span class="line">	  <span class="type">int</span> t = <span class="number">0</span>;  </span><br><span class="line">      <span class="built_in">memcpy</span>(b, a, <span class="keyword">sizeof</span>(a));             <span class="comment">// 复制一份数组</span></span><br><span class="line">	  <span class="keyword">while</span>(j) &#123;  </span><br><span class="line">    	  t++;  </span><br><span class="line">    	  <span class="keyword">if</span>(j &amp; <span class="number">1</span>) &#123;  </span><br><span class="line">    	      count++;  </span><br><span class="line">    	      <span class="type">int</span> x = (t - <span class="number">1</span>) / <span class="number">3</span> + <span class="number">1</span>; 		   <span class="comment">// 行</span></span><br><span class="line">	    	  <span class="type">int</span> y = (t - <span class="number">1</span>) % <span class="number">3</span> + <span class="number">1</span>; 		   <span class="comment">// 列</span></span><br><span class="line">	    	  b[x][y] = b[x][y] ^ <span class="number">1</span>;       <span class="comment">// 改变自己和周围灯的状态</span></span><br><span class="line">	    	  b[x + <span class="number">1</span>][y] = b[x + <span class="number">1</span>][y] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x - <span class="number">1</span>][y] = b[x - <span class="number">1</span>][y] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x][y - <span class="number">1</span>] = b[x][y - <span class="number">1</span>] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x][y + <span class="number">1</span>] = b[x][y + <span class="number">1</span>] ^ <span class="number">1</span>;</span><br><span class="line">	      &#125;</span><br><span class="line">	      j &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	  &#125;</span><br><span class="line">	  <span class="keyword">if</span>(check()) &#123; ans= count &lt; ans? count: ans;&#125;  <span class="comment">// 更新答案</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,ans);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：这段代码在3*3的棋盘外面加上了“一层壳”，有效避免了边界的特别处理</p>
+<h3 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h3><p>使用了Web CodeServer现场演示，PPT和内容存在网页中，可以在教室电脑上直接运行，无需投影/配环境</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E6%A0%A1%E7%94%9F%E6%B4%BB/" rel="tag"># 学校生活</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/18/njuseSAT-1/" rel="prev" title="2022科协第一次内训">
+                  <i class="fa fa-chevron-left"></i> 2022科协第一次内训
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bofan Xie</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"nboxff","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

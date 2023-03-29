@@ -1732,4 +1732,143 @@
         <tag>学校生活</tag>
       </tags>
   </entry>
+  <entry>
+    <title>2023科协第二次MINI内训</title>
+    <url>/2023/03/29/njuseSAT-2/</url>
+    <content><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>2023年3月26日，软件学院科协赛事部在EL大赛策划会议后举行了第二次内训。本次内训如愿线下举行，内容轻松愉快，讲述了如何将二进制运用到程序设计之中。算是一次成功的MINI内训。</p>
+<h3 id="回顾位运算"><a href="#回顾位运算" class="headerlink" title="回顾位运算"></a>回顾位运算</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>符号</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>运算规则</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;</code></td>
+<td>与</td>
+<td>两个位都为1时，结果才为1</td>
+</tr>
+<tr>
+<td></td>
+<td>或</td>
+<td>两个位都为0时，结果才为0</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>异或</td>
+<td>两个位相同为0，相异为1</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>取反</td>
+<td>0变1，1变0</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>左移</td>
+<td>各二进位全部左移若干位，高位丢弃，低位补0</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>右移</td>
+<td>各二进位全部右移若干位</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span id="more"></span>
+<h3 id="一些简单的例子"><a href="#一些简单的例子" class="headerlink" title="一些简单的例子"></a>一些简单的例子</h3><ol>
+<li><p>用位运算判断一个数是否是奇数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (x &amp; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;x is odd.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>取出二进制数的倒数第$k$位</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">(x &gt;&gt; (k - <span class="number">1</span>)) &amp; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将一个<strong>整数</strong>乘以$2^k$</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">x &lt;&lt;= k;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="这仍然是一个easy的问题"><a href="#这仍然是一个easy的问题" class="headerlink" title="这仍然是一个easy的问题"></a>这仍然是一个easy的问题</h3><p> 二进制以字符串的形式描述</p>
+<p> （1）将一个二进制数转化为十进制数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> num = <span class="number">0</span>; </span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">     num = (num &lt;&lt; <span class="number">1</span>) | (s[i] - <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> （2）将一个十进制数转化为二进制数</p>
+<blockquote>
+<p>重要思想： 其实数在计算机内本来就是二进制的，所以十进制数转化为二进制数就是依次取出二进制数的倒数第$k$位</p>
+</blockquote>
+<hr>
+<h3 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a>快速幂算法</h3><p>问题：如何快速求解$x^p$ 或$x^p$ mod r的值</p>
+<ul>
+<li><p>在$O(n)$的时间内求解这个问题应该不是什么难事</p>
+</li>
+<li><p>能否在$O(log n)$的时间内求解这个问题</p>
+</li>
+</ul>
+<h4 id="分治思想"><a href="#分治思想" class="headerlink" title="分治思想"></a>分治思想</h4><ul>
+<li><p>当p 为偶数时， $n^p = (n^{p/2})^2$</p>
+</li>
+<li><p>当p 为奇数时呢？ $p -1$ 是偶数</p>
+</li>
+</ul>
+<p>我们可以写<strong>递归</strong>函数解决</p>
+<h4 id="二进制分解"><a href="#二进制分解" class="headerlink" title="二进制分解"></a>二进制分解</h4><p> 能否不用递归？</p>
+<p> 以求$x^{21}$ 为例：$(21)_{10}=(10101)_2$ </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$x^{16}$</th>
+<th>$x^{8}$</th>
+<th>$x^{4}$</th>
+<th>$x^{2}$</th>
+<th>$x^{1}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每一位</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+21 = 16 + 4 + 1</script><script type="math/tex; mode=display">
+x^{21} = x^{16} * x^4 * x^1</script><p><img src="https://s1.ax1x.com/2023/03/29/ppgA6kn.png" alt="ppgA6kn.png"></p>
+<p><strong>Python参考代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fast_pow</span>(<span class="params">x, p</span>):</span><br><span class="line">    ans = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> p &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">if</span> p &amp; <span class="number">1</span> == <span class="number">1</span>:</span><br><span class="line">            ans = ans * x</span><br><span class="line">        x = x * x</span><br><span class="line">        p &gt;&gt;= <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line">x, p = [<span class="built_in">int</span>(t) <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">input</span>().split()]</span><br><span class="line"><span class="built_in">print</span>(fast_pow(x, p))</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="状态压缩"><a href="#状态压缩" class="headerlink" title="状态压缩"></a>状态压缩</h3><p> <a href="https://www.luogu.com.cn/problem/P2040">P2040 </a><a href="https://www.luogu.com.cn/problem/P2040">打开所有的灯 </a><a href="https://www.luogu.com.cn/problem/P2040">- </a><a href="https://www.luogu.com.cn/problem/P2040">洛谷 </a><a href="https://www.luogu.com.cn/problem/P2040">| </a><a href="https://www.luogu.com.cn/problem/P2040">计算机科学教育新生态 </a><a href="https://www.luogu.com.cn/problem/P2040">(luogu.com.cn)</a></p>
+<p> <strong>题目描述</strong></p>
+<p> 这个灯很奇怪，点一下就会将这个灯和其周围四盏灯的<strong>开关状态全部改变</strong>。现在你的任务就是就是求要打开全部这些灯最少需要点几下。</p>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0  1  1</span><br><span class="line">1  0  0</span><br><span class="line">1  0  1</span><br></pre></td></tr></table></figure>
+<p>点一下最中间的灯【2,2】就变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0  0  1</span><br><span class="line">0  1  1</span><br><span class="line">1  1  1</span><br></pre></td></tr></table></figure>
+<p>再点一下左上角的灯【1,1】就变成了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1  1  1</span><br><span class="line">1  1  1</span><br><span class="line">1  1  1</span><br></pre></td></tr></table></figure>
+<p>达成目标。最少需要2步。</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p><del>像极了洛克王国打幽系徽章玩的小游戏</del></p>
+<ul>
+<li>一个灯点1次和点3的效果是一样的</li>
+<li>那么我们是不是可以<strong>枚举</strong>每个灯的状态</li>
+<li>每个灯就是一个0或者1</li>
+<li>可以用<strong>9位的二进制数（0~511）</strong>描述所有操作组合</li>
+</ul>
+<p><strong>C语言参考代码</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> a[<span class="number">5</span>][<span class="number">5</span>], b[<span class="number">5</span>][<span class="number">5</span>];</span><br><span class="line"><span class="type">int</span> ans = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="title function_">check</span><span class="params">()</span> &#123; <span class="comment">// 检查灯是否已经全部打开</span></span><br><span class="line">    <span class="type">int</span> sum=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span> ;i &lt;= <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= <span class="number">3</span>; j++) &#123;</span><br><span class="line">            sum += b[i][j];</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (sum == <span class="number">9</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i &lt;= <span class="number">3</span>;i++)</span><br><span class="line">      <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>;j &lt;= <span class="number">3</span>;j++)</span><br><span class="line">          <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; <span class="number">9</span>); i++) &#123;      <span class="comment">// 从0 ~ 2 ^ 9 - 1枚举</span></span><br><span class="line">  	  <span class="type">int</span> j = i;  </span><br><span class="line">      <span class="type">int</span> count = <span class="number">0</span>;   </span><br><span class="line">	  <span class="type">int</span> t = <span class="number">0</span>;  </span><br><span class="line">      <span class="built_in">memcpy</span>(b, a, <span class="keyword">sizeof</span>(a));             <span class="comment">// 复制一份数组</span></span><br><span class="line">	  <span class="keyword">while</span>(j) &#123;  </span><br><span class="line">    	  t++;  </span><br><span class="line">    	  <span class="keyword">if</span>(j &amp; <span class="number">1</span>) &#123;  </span><br><span class="line">    	      count++;  </span><br><span class="line">    	      <span class="type">int</span> x = (t - <span class="number">1</span>) / <span class="number">3</span> + <span class="number">1</span>; 		   <span class="comment">// 行</span></span><br><span class="line">	    	  <span class="type">int</span> y = (t - <span class="number">1</span>) % <span class="number">3</span> + <span class="number">1</span>; 		   <span class="comment">// 列</span></span><br><span class="line">	    	  b[x][y] = b[x][y] ^ <span class="number">1</span>;       <span class="comment">// 改变自己和周围灯的状态</span></span><br><span class="line">	    	  b[x + <span class="number">1</span>][y] = b[x + <span class="number">1</span>][y] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x - <span class="number">1</span>][y] = b[x - <span class="number">1</span>][y] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x][y - <span class="number">1</span>] = b[x][y - <span class="number">1</span>] ^ <span class="number">1</span>;</span><br><span class="line">	    	  b[x][y + <span class="number">1</span>] = b[x][y + <span class="number">1</span>] ^ <span class="number">1</span>;</span><br><span class="line">	      &#125;</span><br><span class="line">	      j &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">	  &#125;</span><br><span class="line">	  <span class="keyword">if</span>(check()) &#123; ans= count &lt; ans? count: ans;&#125;  <span class="comment">// 更新答案</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,ans);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：这段代码在3*3的棋盘外面加上了“一层壳”，有效避免了边界的特别处理</p>
+<h3 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h3><p>使用了Web CodeServer现场演示，PPT和内容存在网页中，可以在教室电脑上直接运行，无需投影/配环境</p>
+]]></content>
+      <tags>
+        <tag>学校生活</tag>
+      </tags>
+  </entry>
 </search>
