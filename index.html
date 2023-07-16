@@ -152,7 +152,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -206,6 +206,108 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://nboxff.cn/2023/07/16/javaRules/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Bofan Xie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/16/javaRules/" class="post-title-link" itemprop="url">Java编程规范</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-07-16 15:10:08 / 修改时间：15:13:26" itemprop="dateCreated datePublished" datetime="2023-07-16T15:10:08+08:00">2023-07-16</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/07/16/javaRules/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/07/16/javaRules/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="基本语句"><a href="#基本语句" class="headerlink" title="基本语句"></a>基本语句</h3><ol>
+<li>switch语句要有default分支，除非switch的条件变量是枚举类型</li>
+<li>if-else if类型的条件判断，最后应包含一个else分支</li>
+<li>不能用浮点数作为循环变量</li>
+</ol>
+<h3 id="类的使用"><a href="#类的使用" class="headerlink" title="类的使用"></a>类的使用</h3><h4 id="覆写时要加上-override注解"><a href="#覆写时要加上-override注解" class="headerlink" title="覆写时要加上@override注解"></a>覆写时要加上@override注解</h4><p>原因：</p>
+<ul>
+<li>如果覆写时因为疏忽，导致子类方法的参数同父类不一致，<strong>编译时会报错</strong>，使问题在<strong>编译期</strong>就被发现。</li>
+<li>如果父类修改了方法的定义造成子类不再覆写父类方法，也能使问题在<strong>编译期</strong>尽早被发现。</li>
+</ul>
+<p>未使用<code>@override</code>注解可能难以发现的错误：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Vehicle</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Vehicle is running&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类编写方法覆写父类方法</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">rum</span><span class="params">()</span> &#123;  <span class="comment">// 方法名不正确</span></span><br><span class="line">    System.out.println(<span class="string">&quot;the Car is running&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">run</span><span class="params">(String name)</span> &#123;  <span class="comment">// 方法参数不正确</span></span><br><span class="line">    System.out.println(name + <span class="string">&quot;drives the Car is running&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/16/javaRules/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1173,110 +1275,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/03/20/online-vscode/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://nboxff.cn/2022/02/24/2048/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Bofan Xie">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Nboxff's Blog">
-      <meta itemprop="description" content="">
-    </span>
-    
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Nboxff's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/02/24/2048/" class="post-title-link" itemprop="url">大一上C语言小作业——2048小游戏</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-02-24 13:59:13" itemprop="dateCreated datePublished" datetime="2022-02-24T13:59:13+08:00">2022-02-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-10-02 20:20:55" itemprop="dateModified" datetime="2022-10-02T20:20:55+08:00">2022-10-02</time>
-    </span>
-
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2022/02/24/2048/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/02/24/2048/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="大一上C语言小作业——2048小游戏"><a href="#大一上C语言小作业——2048小游戏" class="headerlink" title="大一上C语言小作业——2048小游戏"></a>大一上C语言小作业——2048小游戏</h3><p>项目要求：使用C语言编写2048小游戏</p>
-<h4 id="界面设置部分"><a href="#界面设置部分" class="headerlink" title="界面设置部分"></a>界面设置部分</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HideCursor</span><span class="params">()</span> &#123;            <span class="comment">//隐藏光标</span></span><br><span class="line">    CONSOLE_CURSOR_INFO curInfo;</span><br><span class="line">    curInfo.dwSize = <span class="number">1</span>;</span><br><span class="line">    curInfo.bVisible = FALSE;</span><br><span class="line">    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);</span><br><span class="line">    SetConsoleCursorInfo(handle, &amp;curInfo);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Goto</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;       <span class="comment">//光标移动到(x,y)位置</span></span><br><span class="line">    COORD pos;</span><br><span class="line">    pos.X = x;</span><br><span class="line">    pos.Y = y;</span><br><span class="line">    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);</span><br><span class="line">    SetConsoleCursorPosition(handle, pos);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">PreWork</span><span class="params">()</span> &#123;</span><br><span class="line">    system(<span class="string">&quot;title 2048&quot;</span>);        <span class="comment">//窗口标题为2048</span></span><br><span class="line">    system(<span class="string">&quot;mode con cols=40 lines=21&quot;</span>);  <span class="comment">//窗口大小</span></span><br><span class="line">    system(<span class="string">&quot;chcp 65001 &gt; nul&quot;</span>);  <span class="comment">//中文支持</span></span><br><span class="line">    HideCursor();                <span class="comment">//隐藏光标</span></span><br><span class="line">    CONSOLE_FONT_INFOEX cfi;</span><br><span class="line">    cfi.cbSize = <span class="keyword">sizeof</span> cfi;</span><br><span class="line">    cfi.nFont = <span class="number">0</span>;</span><br><span class="line">    cfi.dwFontSize.X = <span class="number">15</span>;</span><br><span class="line">    cfi.dwFontSize.Y = <span class="number">30</span>;</span><br><span class="line">    cfi.FontFamily = FF_DONTCARE;</span><br><span class="line">    cfi.FontWeight = FW_NORMAL;</span><br><span class="line">    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &amp;cfi);</span><br><span class="line">    srand((<span class="type">unsigned</span>) time(<span class="literal">NULL</span>));  <span class="comment">//随机函数种子</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="游戏初始化"><a href="#游戏初始化" class="headerlink" title="游戏初始化"></a>游戏初始化</h4><p>游戏”棋盘“初始化要做的事：</p>
-<ul>
-<li>清空“棋盘”</li>
-<li>生成两个数（2或4），其中生成2的概率较大</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">InitGameMap</span><span class="params">()</span> &#123;</span><br><span class="line">    score = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">memset</span>(gameMap, <span class="number">-1</span>, <span class="keyword">sizeof</span>(gameMap));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j++) &#123;</span><br><span class="line">            gameMap[i][j] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> total = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (total &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="type">int</span> x = rand() % <span class="number">4</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> y = rand() % <span class="number">4</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> temp = rand() % <span class="number">6</span> + <span class="number">1</span>;  <span class="comment">//temp 的范围是[1, 6]</span></span><br><span class="line">        <span class="type">int</span> num = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (temp == <span class="number">1</span>) num = <span class="number">4</span>;     <span class="comment">//设置1/6的概率生成数字4</span></span><br><span class="line">        <span class="keyword">if</span> (!gameMap[x][y]) &#123;</span><br><span class="line">            gameMap[x][y] = num;</span><br><span class="line">            total++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/02/24/2048/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
