@@ -2078,6 +2078,20 @@ x^{21} = x^{16} * x^4 * x^1</script><p><img src="https://s1.ax1x.com/2023/03/29/
 </ul>
 <p>这样太麻烦了，推荐更简便的方法（带参数的<code>toArray</code>方法）</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">array3</span> <span class="operator">=</span> nameList3.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[nameList3.size()]);</span><br></pre></td></tr></table></figure>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h4 id="异常条件下，保证释放已持有的锁"><a href="#异常条件下，保证释放已持有的锁" class="headerlink" title="异常条件下，保证释放已持有的锁"></a>异常条件下，保证释放已持有的锁</h4><p><strong>ReentrantLock</strong></p>
+<p>可重入的互斥锁，是一种递归无阻塞的同步机制。它可以等同于synchronized的使用，但是ReentrantLock提供了比synchronized更强大、灵活的锁机制，可以减少死锁发生的概率</p>
+<ul>
+<li><p>ReentrantLock类能够实现线程之间的同步互斥</p>
+</li>
+<li><p>ReentrantLock类具有完全互斥排他的效果，即同一时间只有一个线程在执行ReentrantLock.lock()方法后面的任务</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">service</span><span class="params">(Object inputData)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        <span class="comment">// 可能发生异常</span></span><br><span class="line">    &#125; <span class="keyword">catch</span>(InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 异常状态也要释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="防止通过异常泄漏敏感信息"><a href="#防止通过异常泄漏敏感信息" class="headerlink" title="防止通过异常泄漏敏感信息"></a>防止通过异常泄漏敏感信息</h4><p>例如：文件不存在的异常可以泄漏文件系统的结构</p>
+<p>解决方法：限制可访问的文件目录</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (!file.getPath().startsWith(<span class="string">&quot;c:\\homepath&quot;</span>)) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Invalid path.&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="在finally块中不要使finally块非正常结束"><a href="#在finally块中不要使finally块非正常结束" class="headerlink" title="在finally块中不要使finally块非正常结束"></a>在finally块中不要使finally块非正常结束</h4><p><code>return</code>, <code>break</code>, <code>continue</code>会使finally块非正常结束</p>
+<p>后果：即使在try块或catch中抛出了异常，也会因为finally非正常结束而导致无法输出</p>
 ]]></content>
       <tags>
         <tag>编程语言</tag>

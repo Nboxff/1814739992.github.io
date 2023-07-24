@@ -28,7 +28,7 @@
 <meta property="og:description" content="基本语句 switch语句要有default分支，除非switch的条件变量是枚举类型 if-else if类型的条件判断，最后应包含一个else分支 不能用浮点数作为循环变量  类的使用覆写时要加上@override注解原因：  如果覆写时因为疏忽，导致子类方法的参数同父类不一致，编译时会报错，使问题在编译期就被发现。 如果父类修改了方法的定义造成子类不再覆写父类方法，也能使问题在编译期尽早被发">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-16T07:10:08.000Z">
-<meta property="article:modified_time" content="2023-07-16T07:13:26.994Z">
+<meta property="article:modified_time" content="2023-07-24T12:17:41.247Z">
 <meta property="article:author" content="Bofan Xie">
 <meta property="article:tag" content="编程语言">
 <meta name="twitter:card" content="summary">
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.</span> <span class="nav-text">基本语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">类的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A6%86%E5%86%99%E6%97%B6%E8%A6%81%E5%8A%A0%E4%B8%8A-override%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.1.</span> <span class="nav-text">覆写时要加上@override注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%85%A5HashSet%EF%BC%8C%E6%88%96%E4%BD%9C%E4%B8%BAkey%E5%AD%98%E5%85%A5HashMap%E5%90%8E%EF%BC%8C%E5%BF%85%E9%A1%BB%E7%A1%AE%E4%BF%9D%E8%AF%A5%E5%AF%B9%E8%B1%A1%E7%9A%84hashcode%E5%80%BC%E4%B8%8D%E5%8F%98"><span class="nav-number">2.2.</span> <span class="nav-text">将对象存入HashSet，或作为key存入HashMap后，必须确保该对象的hashcode值不变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%91%E4%B8%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%89%8D%E7%94%A8instance-of-%E8%BF%9B%E8%A1%8C%E5%88%A4%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">向下类型转换前用instance of 进行判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%9B%86%E5%90%88%E7%9A%84toArray-%E6%96%B9%E6%B3%95%E5%B0%86%E9%9B%86%E5%90%88%E8%BD%AC%E4%B8%BA%E6%95%B0%E7%BB%84"><span class="nav-number">2.4.</span> <span class="nav-text">使用集合的toArray()方法将集合转为数组</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.</span> <span class="nav-text">基本语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">类的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A6%86%E5%86%99%E6%97%B6%E8%A6%81%E5%8A%A0%E4%B8%8A-override%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.1.</span> <span class="nav-text">覆写时要加上@override注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%86%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%85%A5HashSet%EF%BC%8C%E6%88%96%E4%BD%9C%E4%B8%BAkey%E5%AD%98%E5%85%A5HashMap%E5%90%8E%EF%BC%8C%E5%BF%85%E9%A1%BB%E7%A1%AE%E4%BF%9D%E8%AF%A5%E5%AF%B9%E8%B1%A1%E7%9A%84hashcode%E5%80%BC%E4%B8%8D%E5%8F%98"><span class="nav-number">2.2.</span> <span class="nav-text">将对象存入HashSet，或作为key存入HashMap后，必须确保该对象的hashcode值不变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%91%E4%B8%8B%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%89%8D%E7%94%A8instance-of-%E8%BF%9B%E8%A1%8C%E5%88%A4%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">向下类型转换前用instance of 进行判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%9B%86%E5%90%88%E7%9A%84toArray-%E6%96%B9%E6%B3%95%E5%B0%86%E9%9B%86%E5%90%88%E8%BD%AC%E4%B8%BA%E6%95%B0%E7%BB%84"><span class="nav-number">2.4.</span> <span class="nav-text">使用集合的toArray()方法将集合转为数组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%9D%A1%E4%BB%B6%E4%B8%8B%EF%BC%8C%E4%BF%9D%E8%AF%81%E9%87%8A%E6%94%BE%E5%B7%B2%E6%8C%81%E6%9C%89%E7%9A%84%E9%94%81"><span class="nav-number">3.1.</span> <span class="nav-text">异常条件下，保证释放已持有的锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E9%80%9A%E8%BF%87%E5%BC%82%E5%B8%B8%E6%B3%84%E6%BC%8F%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.</span> <span class="nav-text">防止通过异常泄漏敏感信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8finally%E5%9D%97%E4%B8%AD%E4%B8%8D%E8%A6%81%E4%BD%BFfinally%E5%9D%97%E9%9D%9E%E6%AD%A3%E5%B8%B8%E7%BB%93%E6%9D%9F"><span class="nav-number">3.3.</span> <span class="nav-text">在finally块中不要使finally块非正常结束</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -250,9 +250,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-07-16 15:10:08 / 修改时间：15:13:26" itemprop="dateCreated datePublished" datetime="2023-07-16T15:10:08+08:00">2023-07-16</time>
+      <time title="创建时间：2023-07-16 15:10:08" itemprop="dateCreated datePublished" datetime="2023-07-16T15:10:08+08:00">2023-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-24 20:17:41" itemprop="dateModified" datetime="2023-07-24T20:17:41+08:00">2023-07-24</time>
     </span>
 
   
@@ -313,6 +319,20 @@
 </ul>
 <p>这样太麻烦了，推荐更简便的方法（带参数的<code>toArray</code>方法）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">array3</span> <span class="operator">=</span> nameList3.toArray(<span class="keyword">new</span> <span class="title class_">String</span>[nameList3.size()]);</span><br></pre></td></tr></table></figure>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><h4 id="异常条件下，保证释放已持有的锁"><a href="#异常条件下，保证释放已持有的锁" class="headerlink" title="异常条件下，保证释放已持有的锁"></a>异常条件下，保证释放已持有的锁</h4><p><strong>ReentrantLock</strong></p>
+<p>可重入的互斥锁，是一种递归无阻塞的同步机制。它可以等同于synchronized的使用，但是ReentrantLock提供了比synchronized更强大、灵活的锁机制，可以减少死锁发生的概率</p>
+<ul>
+<li><p>ReentrantLock类能够实现线程之间的同步互斥</p>
+</li>
+<li><p>ReentrantLock类具有完全互斥排他的效果，即同一时间只有一个线程在执行ReentrantLock.lock()方法后面的任务</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">service</span><span class="params">(Object inputData)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        <span class="comment">// 可能发生异常</span></span><br><span class="line">    &#125; <span class="keyword">catch</span>(InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock(); <span class="comment">// 异常状态也要释放锁</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="防止通过异常泄漏敏感信息"><a href="#防止通过异常泄漏敏感信息" class="headerlink" title="防止通过异常泄漏敏感信息"></a>防止通过异常泄漏敏感信息</h4><p>例如：文件不存在的异常可以泄漏文件系统的结构</p>
+<p>解决方法：限制可访问的文件目录</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!file.getPath().startsWith(<span class="string">&quot;c:\\homepath&quot;</span>)) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Invalid path.&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="在finally块中不要使finally块非正常结束"><a href="#在finally块中不要使finally块非正常结束" class="headerlink" title="在finally块中不要使finally块非正常结束"></a>在finally块中不要使finally块非正常结束</h4><p><code>return</code>, <code>break</code>, <code>continue</code>会使finally块非正常结束</p>
+<p>后果：即使在try块或catch中抛出了异常，也会因为finally非正常结束而导致无法输出</p>
 
     </div>
 
