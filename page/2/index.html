@@ -152,13 +152,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -206,6 +206,109 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://nboxff.cn/2022/03/20/online-vscode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Bofan Xie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/20/online-vscode/" class="post-title-link" itemprop="url">配置online vscode</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-03-20 21:15:06" itemprop="dateCreated datePublished" datetime="2022-03-20T21:15:06+08:00">2022-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-17 22:08:39" itemprop="dateModified" datetime="2022-10-17T22:08:39+08:00">2022-10-17</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/03/20/online-vscode/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/03/20/online-vscode/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>前段时间购入了一台华为Matepad11，真的非常的香。但是对于经常写代码又不想随时背着笔记本电脑的软院学生而言，遗憾的是，平板上并没有好的代码编辑器。</p>
+<p>于是，在云服务器上部署一个online代码编辑器的想法诞生了。</p>
+<p>本人用的是大一上学期双十一期间购入的腾讯云轻量应用服务器，最近还免费升级到了4核4G，很赞。</p>
+<h3 id="利用docker安装online-vscode"><a href="#利用docker安装online-vscode" class="headerlink" title="利用docker安装online vscode"></a>利用docker安装online vscode</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=code-server \</span><br><span class="line">  -e PUID=1000 \</span><br><span class="line">  -e PGID=1000 \</span><br><span class="line">  -e TZ=Asia/Shanghai \</span><br><span class="line">  -e PASSWORD= \</span><br><span class="line">  -e SUDO_PASSWORD= \</span><br><span class="line">  -p 8080:8443 \</span><br><span class="line">  -v /path/to/appdata/config:/config \</span><br><span class="line">  -v /root/vscode:/vscode \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  lscr.io/linuxserver/code-server</span><br></pre></td></tr></table></figure>
+<h3 id="设置腾讯云防火墙"><a href="#设置腾讯云防火墙" class="headerlink" title="设置腾讯云防火墙"></a>设置腾讯云防火墙</h3><p>启动docker以后还是无法在<code>http:IP地址:8080</code>中访问online vscode, 原因是没有在云服务器的防火墙中添加新的规则，开放端口</p>
+<p><img src="/images/image-20220320212651339.png" alt="image-20220320212651339"></p>
+<p>现在再次访问<code>http:IP地址:8080</code>就可以跳转到登陆界面了，输入之前PASSWORD设置的密码就可以登陆了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/20/online-vscode/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

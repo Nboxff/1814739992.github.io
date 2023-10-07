@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nboxff.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="项目地址：https:&#x2F;&#x2F;github.com&#x2F;CompilerBagel&#x2F;CompilerBagel 本项目为2023 年华为毕昇杯 CompilerBagel 组参赛作品，基于Java语言和Antlr框架，实现从SysY2022语言（C语言的子集）到RISC-V架构下汇编语言的完整编译器。  项目整体流程：词法、语法分析-&gt;中间代码生成-&gt;目标代码生成-&gt;寄存器分配-&amp;gt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CompilerBagel-Make our compiler(SysY2022 to RISC-V asm)">
+<meta property="og:url" content="http://nboxff.cn/2023/10/07/CompilerBagel/index.html">
+<meta property="og:site_name" content="Nboxff&#39;s Blog">
+<meta property="og:description" content="项目地址：https:&#x2F;&#x2F;github.com&#x2F;CompilerBagel&#x2F;CompilerBagel 本项目为2023 年华为毕昇杯 CompilerBagel 组参赛作品，基于Java语言和Antlr框架，实现从SysY2022语言（C语言的子集）到RISC-V架构下汇编语言的完整编译器。  项目整体流程：词法、语法分析-&gt;中间代码生成-&gt;目标代码生成-&gt;寄存器分配-&amp;gt">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://nboxff.cn/images/image-20231007151442055.png">
+<meta property="article:published_time" content="2023-10-07T09:38:37.000Z">
+<meta property="article:modified_time" content="2023-10-07T09:50:02.471Z">
+<meta property="article:author" content="Bofan Xie">
+<meta property="article:tag" content="编译器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://nboxff.cn/images/image-20231007151442055.png">
+
+
+<link rel="canonical" href="http://nboxff.cn/2023/10/07/CompilerBagel/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://nboxff.cn/2023/10/07/CompilerBagel/","path":"2023/10/07/CompilerBagel/","title":"CompilerBagel-Make our compiler(SysY2022 to RISC-V asm)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CompilerBagel-Make our compiler(SysY2022 to RISC-V asm) | Nboxff's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Nboxff's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，记录生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lexer-and-Parser"><span class="nav-number">1.</span> <span class="nav-text">Lexer and Parser</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-a-g4-file"><span class="nav-number">1.1.</span> <span class="nav-text">Write a g4 file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-a-Makefile-to-generate-Lexer-and-Parser"><span class="nav-number">1.2.</span> <span class="nav-text">Write a Makefile to generate Lexer and Parser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test-our-Lexer-and-Parser"><span class="nav-number">1.3.</span> <span class="nav-text">Test our Lexer and Parser</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generate-LLVM-like-IR"><span class="nav-number">2.</span> <span class="nav-text">Generate LLVM-like IR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-Structure-Design"><span class="nav-number">2.1.</span> <span class="nav-text">Class Structure Design</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IR-Module%EF%BC%8CFunctionBlock-and-BasicBlock"><span class="nav-number">2.1.1.</span> <span class="nav-text">IR Module，FunctionBlock and BasicBlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-System"><span class="nav-number">2.1.2.</span> <span class="nav-text">Type System</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scope"><span class="nav-number">2.1.3.</span> <span class="nav-text">Scope</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IRBuilder"><span class="nav-number">2.1.4.</span> <span class="nav-text">IRBuilder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Instruction-and-Virtual-Regiser"><span class="nav-number">2.1.5.</span> <span class="nav-text">Instruction and Virtual Regiser</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IRGenVisitor"><span class="nav-number">2.2.</span> <span class="nav-text">IRGenVisitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test-our-IR-code"><span class="nav-number">2.3.</span> <span class="nav-text">Test our IR code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backend-of-Our-Compiler"><span class="nav-number">3.</span> <span class="nav-text">Backend of Our Compiler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Instruction-Selection"><span class="nav-number">3.1.</span> <span class="nav-text">Instruction Selection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Calculation"><span class="nav-number">3.1.1.</span> <span class="nav-text">Calculation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Array"><span class="nav-number">3.1.2.</span> <span class="nav-text">Array</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Label-and-Local-Variable"><span class="nav-number">3.1.3.</span> <span class="nav-text">Label and Local Variable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Immediate-Number"><span class="nav-number">3.1.4.</span> <span class="nav-text">Immediate Number</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Register-Allocation"><span class="nav-number">3.2.</span> <span class="nav-text">Register Allocation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Structure"><span class="nav-number">3.2.1.</span> <span class="nav-text">Structure</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Simple-Allocation"><span class="nav-number">3.2.2.</span> <span class="nav-text">Simple Allocation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Function-Call"><span class="nav-number">3.2.3.</span> <span class="nav-text">Function Call</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stack-Allocation"><span class="nav-number">3.3.</span> <span class="nav-text">Stack Allocation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimization"><span class="nav-number">4.</span> <span class="nav-text">Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#frontend-optimization"><span class="nav-number">4.1.</span> <span class="nav-text">frontend optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#backend-optimization"><span class="nav-number">4.2.</span> <span class="nav-text">backend optimization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thanks"><span class="nav-number">5.</span> <span class="nav-text">Thanks</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Bofan Xie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://ydjsir.com.cn/" title="https:&#x2F;&#x2F;ydjsir.com.cn&#x2F;" rel="noopener" target="_blank">YDJSIR</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://150.158.147.166/" title="http:&#x2F;&#x2F;150.158.147.166&#x2F;" rel="noopener" target="_blank">NJU Where to eat</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://quas-modo.github.io/" title="http:&#x2F;&#x2F;quas-modo.github.io" rel="noopener" target="_blank">quas-modo</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://daniel020605.github.io/" title="http:&#x2F;&#x2F;Daniel020605.github.io" rel="noopener" target="_blank">Daniel</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://nboxff.cn/2023/10/07/CompilerBagel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Bofan Xie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CompilerBagel-Make our compiler(SysY2022 to RISC-V asm) | Nboxff's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CompilerBagel-Make our compiler(SysY2022 to RISC-V asm)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-10-07 17:38:37 / 修改时间：17:50:02" itemprop="dateCreated datePublished" datetime="2023-10-07T17:38:37+08:00">2023-10-07</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/10/07/CompilerBagel/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/10/07/CompilerBagel/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/CompilerBagel/CompilerBagel">https://github.com/CompilerBagel/CompilerBagel</a></p>
+<p>本项目为2023 年华为毕昇杯 CompilerBagel 组参赛作品，基于Java语言和Antlr框架，实现从SysY2022语言（C语言的子集）到RISC-V架构下汇编语言的完整编译器。</p>
+</blockquote>
+<p>项目整体流程：词法、语法分析-&gt;中间代码生成-&gt;目标代码生成-&gt;寄存器分配-&gt;代码优化</p>
+<h2 id="Lexer-and-Parser"><a href="#Lexer-and-Parser" class="headerlink" title="Lexer and Parser"></a>Lexer and Parser</h2><p>一个现代的编译器，总是从词法分析器（lexer）和语法分析器（Parser）开始。如今，词法分析和语法分析技术已经相当成熟，有许多现成的工具可以帮助我们自动生成词法分析器和语法分析器。这里我们选用Antlr作为编译器前端生成的工具。</p>
+<h3 id="Write-a-g4-file"><a href="#Write-a-g4-file" class="headerlink" title="Write a g4 file"></a>Write a g4 file</h3><p>我们需要为SysY2022语法编写词法和语法的g4文件，例如（节选）</p>
+<p><strong>SysYLexer.g4:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IDENT : (LETTER | <span class="string">&#x27;_&#x27;</span>) (LETTER | DIGIT | <span class="string">&#x27;_&#x27;</span>)* ;</span><br><span class="line"></span><br><span class="line">fragment</span><br><span class="line">DECIMAL_CONST : <span class="string">&#x27;0&#x27;</span> | [<span class="number">1</span>-<span class="number">9</span>] [<span class="number">0</span>-<span class="number">9</span>]*;</span><br><span class="line"></span><br><span class="line">fragment</span><br><span class="line">OCTAL_CONST : <span class="string">&#x27;0&#x27;</span> [<span class="number">0</span>-<span class="number">7</span>]+;</span><br><span class="line"></span><br><span class="line">fragment</span><br><span class="line">HEX_CONST : (<span class="string">&#x27;0x&#x27;</span> | <span class="string">&#x27;0X&#x27;</span>) (DIGIT | [a-fA-F])+ ;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p><strong>SysYParser.g4:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">varDecl</span><br><span class="line">   : bType <span class="title function_">varDef</span> <span class="params">(COMMA varDef)</span>* SEMICOLON</span><br><span class="line">   ;</span><br><span class="line"></span><br><span class="line">varDef</span><br><span class="line">   : IDENT (L_BRACKT constExp R_BRACKT)* (ASSIGN initVal)?</span><br><span class="line">   ;</span><br><span class="line"></span><br><span class="line">initVal</span><br><span class="line">   : exp</span><br><span class="line">   | L_BRACE (initVal (COMMA initVal)*)? R_BRACE</span><br><span class="line">   ;</span><br></pre></td></tr></table></figure>
+<p>注：完整代码见<a target="_blank" rel="noopener" href="https://github.com/CompilerBagel/CompilerBagel">项目仓库</a></p>
+<h3 id="Write-a-Makefile-to-generate-Lexer-and-Parser"><a href="#Write-a-Makefile-to-generate-Lexer-and-Parser" class="headerlink" title="Write a Makefile to generate Lexer and Parser"></a>Write a Makefile to generate Lexer and Parser</h3><p>g4文件完成后，编写Makefile方便生成词法分析器和语法分析器对应的Java代码。当编译脚本较复杂时，Makefile文件能有效降低工作量，只需在终端运行<code>make antlr</code>。</p>
+<p><strong>Makefile</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> CLASSPATH=./lib/antlr-4.12.0-complete.jar</span><br><span class="line"></span><br><span class="line">ANTLR = java -jar ./lib/antlr-4.12.0-complete.jar -listener -visitor -long-messages</span><br><span class="line">JAVAC = javac -g</span><br><span class="line">JAVA = java</span><br><span class="line"></span><br><span class="line">PFILE = <span class="variable">$(<span class="built_in">shell</span> find ./src/main/java/antlr/ -name &quot;SysYParser.g4&quot;)</span></span><br><span class="line">LFILE = <span class="variable">$(<span class="built_in">shell</span> find ./src/main/java/antlr/ -name &quot;SysYLexer.g4&quot;)</span></span><br><span class="line">JAVAFILE = <span class="variable">$(<span class="built_in">shell</span> find ./src/main/java/antlr/ -name &quot;*.java&quot;)</span></span><br><span class="line">ANTLRPATH = <span class="variable">$(<span class="built_in">shell</span> find /usr/local/lib -name &quot;antlr-*-complete.jar&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="section">antlr: <span class="variable">$(LFILE)</span> <span class="variable">$(PFILE)</span></span></span><br><span class="line">	<span class="variable">$(ANTLR)</span> <span class="variable">$(PFILE)</span> <span class="variable">$(LFILE)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f ./src/main/java/antlr/*.tokens</span><br><span class="line">	rm -f ./src/main/java/antlr/*.interp</span><br><span class="line">	rm -f ./src/main/java/antlr/*.java</span><br><span class="line">	rm -f ./src/main/java/antlr/*.class</span><br><span class="line">	rm -f ./src/main/java/antlr/SysYLexer.java ./src/main/java/antlr/SysYParser.java ./src/main/java/antlr/SysYParserBaseListener.java ./src/main/java/antlr/SysYParserBaseVisitor.java ./src/main/java/antlr/SysYParserListener.java ./src/main/java/antlr/SysYParserVisitor.java</span><br><span class="line">	rm -rf classes</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: antlr clean</span></span><br></pre></td></tr></table></figure>
+<h3 id="Test-our-Lexer-and-Parser"><a href="#Test-our-Lexer-and-Parser" class="headerlink" title="Test our Lexer and Parser"></a>Test our Lexer and Parser</h3><p>测试词法分析器和语法分析器，主要是对我们g4文件正确性的检查。这里使用antlr包下的<code>TestRig</code>工具，输入SysY语言的符合规范的代码进行测试。为此，我们编写了<code>test.sh</code>脚本：</p>
+<blockquote>
+<p>注：由于项目结构调整，这段代码无法在Project中直接运行</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">err_count=0</span><br><span class="line">wrong_num=0</span><br><span class="line"></span><br><span class="line">for sy_file in $(find ./resources -name &quot;*.sy&quot;)</span><br><span class="line">do</span><br><span class="line">  (java org.antlr.v4.gui.TestRig SysY program -tokens &lt; $&#123;sy_file&#125; | grep line) &gt;&amp; output.txt</span><br><span class="line">  err_count=`cat output.txt | wc -l`</span><br><span class="line">  if [ $&#123;err_count&#125; -gt 0 ]</span><br><span class="line">  then</span><br><span class="line">      echo $&#123;sy_file&#125;</span><br><span class="line">      ((wrong_num++))</span><br><span class="line">  fi</span><br><span class="line">done</span><br><span class="line">echo $&#123;wrong_num&#125;</span><br></pre></td></tr></table></figure>
+<p>小插曲：这里利用报错信息中的<code>line</code>关键词进行检索计数，凑巧的是，输入的源文件中也有<code>line</code>这个变量</p>
+<p>，导致误将正确的用例判成错误的。由于这种用例数量较少，我们选择了人工直接排查。</p>
+<p>至此，我们完成了<strong>Lexer and Parser</strong> 的实现。</p>
+<h2 id="Generate-LLVM-like-IR"><a href="#Generate-LLVM-like-IR" class="headerlink" title="Generate LLVM-like IR"></a>Generate LLVM-like IR</h2><p>下面正式进入编译器前端的部分。我们选择类LLVM IR作为我们的中间代码，下面便是利用Parser生成的抽象语法树生成中间代码。</p>
+<h3 id="Class-Structure-Design"><a href="#Class-Structure-Design" class="headerlink" title="Class Structure Design"></a>Class Structure Design</h3><h4 id="IR-Module，FunctionBlock-and-BasicBlock"><a href="#IR-Module，FunctionBlock-and-BasicBlock" class="headerlink" title="IR Module，FunctionBlock and BasicBlock"></a>IR Module，FunctionBlock and BasicBlock</h4><p>仿照LLVM，我们需要实现一个<code>IRModule</code>类，每个<code>IRMoudle</code>中包含了若干个<code>FunctionBlock</code>，每个<code>FunctionBlock</code>中又包含了若干基本块<code>BasicBlock</code>。基本块中包含若干<strong>按顺序执行</strong>的指令（中间代码）。</p>
+<h4 id="Type-System"><a href="#Type-System" class="headerlink" title="Type System"></a>Type System</h4><p>仿照LLVM，我们设计了一套类型系统，所有具体类型实现了<code>Type</code>接口</p>
+<p><img src="/images/image-20231007151442055.png" alt="image-20231007151442055"></p>
+<p>对于<code>IntType</code>，<code>FloatType</code>等类型，我们实现了<strong>单例模式</strong>以方便使用<code>==</code>进行类型判断。</p>
+<p>为类型系统编写Junit单元测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">arrayTypeTest2</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Type</span> <span class="variable">array1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayType</span>(int32Type, <span class="number">5</span>);</span><br><span class="line">    <span class="type">Type</span> <span class="variable">array2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayType</span>(array1, <span class="number">2</span>);</span><br><span class="line">    List&lt;Integer&gt; elementDimension = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    elementDimension.add(<span class="number">2</span>);</span><br><span class="line">    elementDimension.add(<span class="number">5</span>);</span><br><span class="line">    assertEquals(array2.getText(), <span class="string">&quot;[2 x [5 x i32]]&quot;</span>);</span><br><span class="line">    assertEquals(((ArrayType) array2).getElementDimension(), elementDimension);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h4><p>作用域(Scope)，用于处理程序变量作用域的问题，并充当<strong>符号表</strong>的功能。</p>
+<ul>
+<li><p>分为全局作用域（GlobalScope）和局部作用域（LocalScope）。</p>
+</li>
+<li><p>作用域记录自己的父作用域，能<strong>递归地向上搜索符号</strong>。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Scope</span> &#123;</span><br><span class="line">    Scope <span class="title function_">getEnclosingScope</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">define</span><span class="params">(String name, ValueRef valueRef, Type type)</span>;</span><br><span class="line">    ValueRef <span class="title function_">getValueRef</span><span class="params">(String name)</span>;</span><br><span class="line">    Type <span class="title function_">getType</span><span class="params">(String name)</span>;</span><br><span class="line">    String <span class="title function_">getScopeName</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setScopeName</span><span class="params">(String scopeName)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseScope</span> <span class="keyword">implements</span> <span class="title class_">Scope</span> &#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalScope</span> <span class="keyword">extends</span> <span class="title class_">BaseScope</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">GlobalScope</span><span class="params">(String scopeName, Scope enclosingScope)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(scopeName, enclosingScope);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LocalScope</span> <span class="keyword">extends</span> <span class="title class_">BaseScope</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LocalScope</span><span class="params">(String scopeName, Scope enclosingScope)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(scopeName, enclosingScope);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：<code>GlobalScope类</code>和<code>LocalScope</code>类实际上可以合并</p>
+<h4 id="IRBuilder"><a href="#IRBuilder" class="headerlink" title="IRBuilder"></a>IRBuilder</h4><p>：定义一个StringBuilder，利用Visitor设计模式直接遍历语法树，在遍历的同时直接追加字符串怎么样？</p>
+<p>：哦，这<strong>糟糕透了</strong>，我们会出现许多<strong>重复</strong>的字符串常量，而且导致控制流语句的生成十分困难。</p>
+<p><div align = "center">如何解决？<b>加一层!</b></div><br>我们对直接生成中间代码文本和实体类的代码进行一次封装，实现了一个<code>IRbuilder</code>，并提供一套API向IRVistor（负责生成中间代码的类）提供服务。为了方便分工和项目的维护，我们编写了APIs的详细文档。</p>
+<p><strong>文档节选</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从内存中将值取出 </span></span><br><span class="line"><span class="type">ValueRef</span> <span class="variable">value</span> <span class="operator">=</span> IRBuildLoad(builder, <span class="comment">/*pointer: ValueRef*/</span>pointer, <span class="comment">/*varName:String*/</span><span class="string">&quot;value&quot;</span>); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局变量 </span></span><br><span class="line"><span class="comment">// 申明全局变量</span></span><br><span class="line">ValueRef <span class="title function_">IRAddGlobal</span><span class="params">(<span class="keyword">module</span> , type , <span class="string">&quot;globalVarName&quot;</span>)</span>; </span><br><span class="line"><span class="comment">// 初始化全局变量 </span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">IRSetInitializer</span><span class="params">(<span class="keyword">module</span> , valueRef , valueRef)</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="Instruction-and-Virtual-Regiser"><a href="#Instruction-and-Virtual-Regiser" class="headerlink" title="Instruction and Virtual Regiser"></a>Instruction and Virtual Regiser</h4><p>LLVM IR 代码是SSA形式的中间代码，虚拟寄存器数量无限多。我们设计了<code>BaseRegister</code>类并实现<code>ValueRef</code>接口，利用静态成员<code>tempCounter</code>进行计数管理，保证虚拟寄存器不重复命名。</p>
+<p>我们既需要<strong>文本形式</strong>的中间代码，也需要<strong>内存形式</strong>的中间代码。</p>
+<ul>
+<li><p>文本形式：编译利用LLVM工具对中间代码进行测试，降低测试和编写难度（越早测试越好）</p>
+</li>
+<li><p>内存形式：即将<code>Insturction</code>对象传递到编译器后端，进行目标代码翻译</p>
+</li>
+</ul>
+<p>我们根据仿LLVM IR设计了若干指令，并统一实现了<code>Insturction</code>接口</p>
+<ul>
+<li>AllocationInstruction</li>
+<li>BrInsturction</li>
+<li>CalculateInstruction</li>
+<li>…</li>
+</ul>
+<h3 id="IRGenVisitor"><a href="#IRGenVisitor" class="headerlink" title="IRGenVisitor"></a>IRGenVisitor</h3><p>这里是生成中间代码的核心部分，我们利用<strong>Visitor的设计模式</strong>，遍历Antlr生成的语法分析树，根据遍历到的不同的标识生成不同的指令。具体细节和算法请前往具体项目，下面简单介绍和举例：</p>
+<p><strong>运算指令的生成：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> ValueRef <span class="title function_">visitPlusExp</span><span class="params">(SysYParser.PlusExpContext ctx)</span> &#123;</span><br><span class="line">    <span class="type">ValueRef</span> <span class="variable">left</span> <span class="operator">=</span> visit(ctx.exp(<span class="number">0</span>));</span><br><span class="line">    <span class="type">ValueRef</span> <span class="variable">right</span> <span class="operator">=</span> visit(ctx.exp(<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">if</span>(ConstIntVarMap.get(left.getText())!=<span class="literal">null</span>)&#123;</span><br><span class="line">        left = <span class="keyword">new</span> <span class="title class_">ConstIntValueRef</span>(ConstIntVarMap.get(left.getText()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ConstFloatVarMap.get(left.getText())!=<span class="literal">null</span>) &#123;</span><br><span class="line">        left = <span class="keyword">new</span> <span class="title class_">ConstFloatValueRef</span>(ConstFloatVarMap.get(left.getText()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(ConstIntVarMap.get(right.getText())!=<span class="literal">null</span>)&#123;</span><br><span class="line">        right = <span class="keyword">new</span> <span class="title class_">ConstIntValueRef</span>(ConstIntVarMap.get(right.getText()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ConstFloatVarMap.get(right.getText())!=<span class="literal">null</span>) &#123;</span><br><span class="line">        right = <span class="keyword">new</span> <span class="title class_">ConstFloatValueRef</span>(ConstFloatVarMap.get(right.getText()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ctx.PLUS() != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(left.getType() == int32Type &amp;&amp; right.getType() == int32Type) &#123;</span><br><span class="line">            <span class="keyword">return</span> IRBuildCalc(builder, left, right, <span class="string">&quot;add_&quot;</span>, ADD);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> IRBuildCalc(builder, left, right, <span class="string">&quot;fadd_&quot;</span>, FADD);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ctx.MINUS() != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(left.getType() == int32Type &amp;&amp; right.getType() == int32Type) &#123;</span><br><span class="line">            <span class="keyword">return</span> IRBuildCalc(builder, left, right, <span class="string">&quot;sub_&quot;</span>, SUB);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> IRBuildCalc(builder, left, right, <span class="string">&quot;fsub_&quot;</span>, FSUB);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>比较指令的生成</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> ValueRef <span class="title function_">visitLtCond</span><span class="params">(SysYParser.LtCondContext ctx)</span> &#123;</span><br><span class="line">    <span class="type">ValueRef</span> <span class="variable">lVal</span> <span class="operator">=</span> <span class="built_in">this</span>.visit(ctx.cond(<span class="number">0</span>));</span><br><span class="line">    <span class="type">ValueRef</span> <span class="variable">rVal</span> <span class="operator">=</span> <span class="built_in">this</span>.visit(ctx.cond(<span class="number">1</span>));</span><br><span class="line">    <span class="type">ValueRef</span> <span class="variable">cmpResult</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ctx.LT() != <span class="literal">null</span>) &#123;</span><br><span class="line">        cmpResult = IRBuildICmp(builder, IRIntSLT, lVal, rVal, <span class="string">&quot;icmp_LT&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ctx.LE() != <span class="literal">null</span>) &#123;</span><br><span class="line">        cmpResult = IRBuildICmp(builder, IRIntSLE, lVal, rVal, <span class="string">&quot;icmp_LE&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ctx.GE() != <span class="literal">null</span>) &#123;</span><br><span class="line">        cmpResult = IRBuildICmp(builder, IRIntSGE, lVal, rVal, <span class="string">&quot;icmp_GE&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ctx.GT() != <span class="literal">null</span>) &#123;</span><br><span class="line">        cmpResult = IRBuildICmp(builder, IRIntSGT, lVal, rVal, <span class="string">&quot;icmp_GT&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// return IRBuildZExt(builder,cmpResult,int32Type,&quot;tmp_&quot;);</span></span><br><span class="line">    <span class="keyword">return</span> cmpResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>控制流语句翻译</strong></p>
+<p>使用<strong>栈</strong>来控制<code>break</code>和<code>continue</code>语句的跳转，将当前的标签记录在栈中，break一次弹出一层。</p>
+<p>其他一些复杂的地方：<code>int</code>类型和<code>float</code>类型之间的类型转换，16进制数的处理等</p>
+<p>特别地，由于比赛官方需要我们支持一些库函数，我们在前端额外进行了<code>addLib</code>操作。</p>
+<blockquote>
+<p><strong>工具推荐</strong>：一个好用在线编译工具<a target="_blank" rel="noopener" href="https://godbolt.org/">https://godbolt.org</a></p>
+</blockquote>
+<h3 id="Test-our-IR-code"><a href="#Test-our-IR-code" class="headerlink" title="Test our IR code"></a>Test our IR code</h3><p>因为我们实现的是基本兼容LLVM IR的中间代码，所以我们可以直接利用LLVM的工具链进行测试</p>
+<p>一些技术要点：</p>
+<ol>
+<li><p><strong>如何查看main函数的返回值</strong></p>
+<p>使用<code>echo $?</code>命令</p>
+</li>
+<li><p><strong>Unix 中 main函数返回值的范围</strong></p>
+<p>0~255，8bit</p>
+</li>
+</ol>
+<p>测试代码原理不难，循环遍历测试数据，利用<code>clang</code>编译中间代码，将main函数的返回值和程序标准输出与所期望的输出用<code>diff</code>命令进行比对。(<code>lli</code>工具也可以用于测试LLVM IR代码)</p>
+<p><strong>frontend_test.sh</strong>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">pass_num=0</span><br><span class="line">test_num=0</span><br><span class="line">error_files=()</span><br><span class="line"></span><br><span class="line">testcases=$(find ./src/test/resources/functional -name &quot;*.sy&quot; | sort)</span><br><span class="line">for sysy_filename in $&#123;testcases&#125;</span><br><span class="line">do</span><br><span class="line">    ((test_num++))</span><br><span class="line">    echo &quot;$&#123;test_num&#125;: $&#123;sysy_filename&#125;&quot;</span><br><span class="line">    input_file=&quot;$&#123;sysy_filename%.sy&#125;.in&quot;</span><br><span class="line"></span><br><span class="line">    rm ans out answer.txt output.txt out_without_sylib.ll</span><br><span class="line"></span><br><span class="line">    echo &quot;#include \&quot;./src/test/resources/sylib.c\&quot;&quot; &gt; sample.c</span><br><span class="line">    cat $&#123;sysy_filename&#125; &gt;&gt; sample.c</span><br><span class="line"></span><br><span class="line">    clang sample.c -w -o ans</span><br><span class="line">    if [ -f $input_file ]; then</span><br><span class="line">        ./ans &lt; $input_file &gt; answer.txt</span><br><span class="line">    else</span><br><span class="line">        ./ans &gt; answer.txt</span><br><span class="line">    fi</span><br><span class="line">    echo $? &gt;&gt; answer.txt</span><br><span class="line"></span><br><span class="line">    java -Dfile.encoding=UTF-8 -classpath ./target/classes:./lib/antlr-4.12.0-complete.jar Main $&#123;sysy_filename&#125; out_without_sylib.ll test.s raw.s</span><br><span class="line">    clang out_without_sylib.ll ./src/test/resources/sylib.c -w -o out</span><br><span class="line">    if [ -f $input_file ]; then</span><br><span class="line">        timeout 60s ./out &lt; $input_file &gt; output.txt</span><br><span class="line">    else</span><br><span class="line">        timeout 60s ./out &gt; output.txt</span><br><span class="line">    fi</span><br><span class="line">    echo $? &gt;&gt; output.txt</span><br><span class="line"></span><br><span class="line">    diff answer.txt output.txt &gt; /dev/null</span><br><span class="line">    if [ $? == 0 ]; then</span><br><span class="line">        ((pass_num++))</span><br><span class="line">        echo -e &quot;\e[32mPass&quot;</span><br><span class="line">    else</span><br><span class="line">        echo &quot;Wrong return value in $sysy_filename&quot;</span><br><span class="line">        error_files+=($sysy_filename)</span><br><span class="line">    fi</span><br><span class="line">    if [[ &quot;$1&quot; == &quot;d&quot; ]]; then</span><br><span class="line">        read</span><br><span class="line">    fi</span><br><span class="line">    echo -e &quot;\e[0m&quot;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">echo &quot;Pass cases ($pass_num/$test_num)&quot;</span><br><span class="line"></span><br><span class="line">for failed_file in &quot;$&#123;error_files[@]&#125;&quot;</span><br><span class="line">do</span><br><span class="line">    echo $failed_file</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">rm ans out answer.txt output.txt out_without_sylib.ll sample.c</span><br></pre></td></tr></table></figure>
+<p>注：考虑到后端代码生成的需要，我们的代码<strong>并不能通过所有的前端测试，但不影响后端代码生成</strong>。</p>
+<h2 id="Backend-of-Our-Compiler"><a href="#Backend-of-Our-Compiler" class="headerlink" title="Backend of Our Compiler"></a>Backend of Our Compiler</h2><p>终于，我们完成了编译器前端的工作。但是，编译器真正精彩的地方才刚刚开始。由于比赛时间有限，我们编译器的后端相对较简单。</p>
+<p>编译器后端主要要实现<strong>指令选择、寄存器分配、栈空间分配</strong>等。</p>
+<h3 id="Instruction-Selection"><a href="#Instruction-Selection" class="headerlink" title="Instruction Selection"></a>Instruction Selection</h3><p>同样的，我们实现了一系列的后端指令类，这些类实现了<code>MachineCode</code>接口。注意区别的是，在后端浮点数和非浮点数使用<strong>不同</strong>的指令和寄存器。</p>
+<p><code>CodeGen</code>类负责生成目标代码，下面简单介绍一些项目难点</p>
+<h4 id="Calculation"><a href="#Calculation" class="headerlink" title="Calculation"></a>Calculation</h4><p>需要<strong>区分浮点数和整数</strong>，使用不同的指令，这里利用<strong>表驱动</strong>的方式简化代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, String&gt; intOperatorMap = Stream.of(<span class="keyword">new</span> <span class="title class_">String</span>[][] &#123;</span><br><span class="line">    &#123; IRConstants.ADD, ADDW &#125;,</span><br><span class="line">    &#123; IRConstants.SUB, SUBW &#125;,</span><br><span class="line">    &#123; IRConstants.MUL, MULW &#125;,</span><br><span class="line">    &#123; IRConstants.SDIV, DIVW &#125;,</span><br><span class="line">    &#123; IRConstants.XOR, XOR &#125;,</span><br><span class="line">    &#123; IRConstants.SREM, REM &#125;,</span><br><span class="line">    &#123; IRConstants.AND, AND&#125;,</span><br><span class="line">    &#123; IRConstants.SHL, SLLW&#125;,</span><br><span class="line">&#125;).collect(Collectors.toMap(data -&gt; data[<span class="number">0</span>], data -&gt; data[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, String&gt; floatOperatorMap = Stream.of(<span class="keyword">new</span> <span class="title class_">String</span>[][] &#123;</span><br><span class="line">    &#123; IRConstants.FADD, FADD_S &#125;,</span><br><span class="line">    &#123; IRConstants.FSUB, FSUB_S &#125;,</span><br><span class="line">    &#123; IRConstants.FMUL, FMUL_S &#125;,</span><br><span class="line">    &#123; IRConstants.FDIV, FDIV_S &#125;,</span><br><span class="line">&#125;).collect(Collectors.toMap(data -&gt; data[<span class="number">0</span>], data -&gt; data[<span class="number">1</span>]));</span><br></pre></td></tr></table></figure>
+<h4 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h4><p>我们的项目需要实现多维数组，我们需要计算偏移量，区分数组类型和指针类型。对于数组初始化，我们编写了一个<code>memset</code>汇编函数，大大提高了速度，减少了汇编代码量。</p>
+<h4 id="Label-and-Local-Variable"><a href="#Label-and-Local-Variable" class="headerlink" title="Label and Local Variable"></a>Label and Local Variable</h4><p>变量存储在栈中，全局变量存储在<code>.data</code>区，我们需要拿到地址或标签，利用Load或Store指令进行取数据和存数据。这里需要设计一个<strong>变量表</strong>，记录变量位置。</p>
+<h4 id="Immediate-Number"><a href="#Immediate-Number" class="headerlink" title="Immediate Number"></a>Immediate Number</h4><p>在IR层面的字面量常量，在目标代码中需要添加<code>li</code>指令进行。在项目中，我们实现了<code>addLiOperation</code>方法</p>
+<p>部分指令如<code>addi</code>的立即数是有范围的，我们需要特别判断。当数据过大时，需要先使用<code>li</code>指令。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">isLegalImm</span><span class="params">(<span class="type">int</span> imm)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> imm &gt;= -<span class="number">2048</span> &amp;&amp; imm &lt;= <span class="number">2047</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>CodeGen代码举例</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">parseReturnInstr</span><span class="params">(RetInstruction instr, MachineBlock block)</span> &#123;</span><br><span class="line">    List&lt;ValueRef&gt; rets = instr.getOperands();</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != rets.get(<span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="comment">// return not void</span></span><br><span class="line">        <span class="type">MachineOperand</span> <span class="variable">src</span> <span class="operator">=</span> parseOperand(rets.get(<span class="number">0</span>)); <span class="comment">// rets.get(0) retValueRef</span></span><br><span class="line">        <span class="keyword">if</span> (src.isImm()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (((Immeidiate) src).isFloatImm()) &#123;</span><br><span class="line">                src = addLiOperation(src, block);</span><br><span class="line">                src.setPhysicsReg(fa0Reg);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">MCLi</span> <span class="variable">li</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MCLi</span>(a0Reg, src);</span><br><span class="line">                block.getMachineCodes().add(li);</span><br><span class="line">                setDefUse(src, li);</span><br><span class="line">                setDefUse(a0Reg, li);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">Type</span> <span class="variable">type</span> <span class="operator">=</span> ((BaseRegister) src).getType();</span><br><span class="line">            <span class="keyword">if</span> (type == int32Type) &#123;</span><br><span class="line">                <span class="type">MCBinaryInteger</span> <span class="variable">addw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MCBinaryInteger</span>(a0Reg, src, <span class="keyword">new</span> <span class="title class_">Immeidiate</span>(<span class="number">0</span>), ADDI);</span><br><span class="line">                block.getMachineCodes().add(addw);</span><br><span class="line">                setDefUse(src, addw);</span><br><span class="line">                setDefUse(a0Reg, addw);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">BaseRegister</span> <span class="variable">ret</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BaseRegister</span>(<span class="string">&quot;ret&quot;</span>, floatType);</span><br><span class="line">                <span class="type">MCFMv</span> <span class="variable">fmv</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MCFMv</span>(ret, src, FMV_S);</span><br><span class="line">                ret.setPhysicsReg(fa0Reg);</span><br><span class="line">                setDefUse(src, fmv);</span><br><span class="line">                setDefUse(ret, fmv);</span><br><span class="line">                block.getMachineCodes().add(fmv);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">MCReturn</span> <span class="variable">ret</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MCReturn</span>();</span><br><span class="line">    block.getMachineCodes().add(ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Register-Allocation"><a href="#Register-Allocation" class="headerlink" title="Register Allocation"></a>Register Allocation</h3><p>动态分配和指定分配寄存器</p>
+<h4 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h4><p>我们实现了<code>FloatPhysicsReg</code>和<code>PhysicsReg</code>类，其中<code>FloatPhysicsReg</code>继承了<code>PhysicsReg</code></p>
+<p>寄存器分配由<code>RegisterAllocate</code>类实现</p>
+<h4 id="Simple-Allocation"><a href="#Simple-Allocation" class="headerlink" title="Simple Allocation"></a>Simple Allocation</h4><p>由于时间关系，我们实现了一个类似<strong>先来先服务</strong>策略的寄存器分配方法。</p>
+<p><strong>缺点</strong>：部分寄存器反复被用到，导致指令较难并行处理。</p>
+<p><strong>算法</strong>：</p>
+<ol>
+<li>遇到IR代码中的虚拟寄存器时<ul>
+<li>若该虚拟寄存器未分配物理寄存器，在寄存器池中寻找还未用过的寄存器，并分配给它，将物理寄存器设置为<u>不可分配状态</u>。</li>
+<li>否则，返回之前分配的物理寄存器。（使用<code>HashMap</code>记录）</li>
+</ul>
+</li>
+<li>虚拟寄存器保存的<code>接下来还会用到该虚拟寄存器的代码数--</code>,当该值减为0后，释放分配给虚拟寄存器的物理寄存器，设置为<u>可以被分配状态</u>。</li>
+</ol>
+<h4 id="Function-Call"><a href="#Function-Call" class="headerlink" title="Function Call"></a>Function Call</h4><p>要生成RISC-V汇编代码，必须要对C语言函数调用的底层实现有所了解。函数传参中，参数以此存入<code>a0</code>, <code>a1</code>,<code>a2</code>寄存器，函数返回值存入<code>a0</code>， <code>a1</code>寄存器（我们只用到<code>a0</code>）。</p>
+<p>当函数参数过多时，我们需要将参数存入<strong>栈</strong>中。具有调用关系的两个函数FunctionA和FunctionB，它们占据的栈空间是<strong>相邻</strong>的，传递的参数存放在栈空间<strong>相接</strong>的地方。</p>
+<p>浮点数需要使用<code>fa0</code>, <code>fa1</code>,<code>fa2</code>等寄存器，我们需要根据类型指派不同的寄存器</p>
+<h3 id="Stack-Allocation"><a href="#Stack-Allocation" class="headerlink" title="Stack Allocation"></a>Stack Allocation</h3><p>栈分配在指令生成之后，根据指令中需要内存空间分配栈。在指令生成时，不断将栈的大小扩大（记录在变量中）。在指令生成完毕后再<strong>回填</strong>需要栈大小的语句。</p>
+<h2 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h2><p>我们必须反思，由于对编译器后端结构的不熟悉，导致寄存器分配和栈分配<strong>不支持寄存器的溢出</strong>，这导致了Mem2Reg的优化难以进行。并且，由于时间关系，我们只实现了一些基本的<strong>窥孔优化</strong>。</p>
+<p>除了再CodeGen类中直接修改外，我们添加了一个<code>opt</code>包，在代码生成后添加代码优化类。</p>
+<h3 id="frontend-optimization"><a href="#frontend-optimization" class="headerlink" title="frontend optimization"></a>frontend optimization</h3><p>常量立即数化，将文本中的<code>3 + 5</code>由编译器直接计算成<code>8</code></p>
+<h3 id="backend-optimization"><a href="#backend-optimization" class="headerlink" title="backend optimization"></a>backend optimization</h3><p><strong>代数化简和强度消减</strong></p>
+<ul>
+<li><p>代数化简，类似x = x + 0可被删除。</p>
+</li>
+<li><p>强度消减，把代价比较高的运算替换成目标机器上代价较低的等价运算。</p>
+<p>例如：含2的幂次方的乘法指令转化成相应的左移指令，含2的幂次方的除法指令转化成相应的右移指令，2的幂次方的取余指令转化成相应的and指令</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mul a1, a1, 2 -&gt; slliw a1, a1, 1</span><br></pre></td></tr></table></figure>
+<p><strong>消除冗余的加载和保存指令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ld a0, addr</span><br><span class="line">sd addr, a0 # 此条语句可被删除</span><br></pre></td></tr></table></figure>
+<p><strong>消除不可达代码</strong></p>
+<p>在同一个基本块中，跟在无条件跳转指令或函数返回指令后的代码可被消除。</p>
+<p><strong>代码实现</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    <span class="type">MachineCode</span> <span class="variable">code</span> <span class="operator">=</span> iterator.next();</span><br><span class="line">    <span class="keyword">if</span> (lastCode <span class="keyword">instanceof</span> MCReturn) &#123;</span><br><span class="line">        removeList.add(code);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (lastCode <span class="keyword">instanceof</span> MCJump &amp;&amp; ((MCJump) lastCode).getType().equals(J)) &#123;</span><br><span class="line">        removeList.add(code);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRedundancyLS(lastCode, code)) &#123;</span><br><span class="line">        <span class="comment">// 1. LD r0, a  2. ST a, R0</span></span><br><span class="line">        removeList.add(code);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRedundancyLoad(lastCode, code)) &#123;</span><br><span class="line">        <span class="comment">// 1. ST a, R0 2. LD R0, a</span></span><br><span class="line">        removeList.add(code);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRepeatCode(lastCode, code)) &#123;</span><br><span class="line">        removeList.add(lastCode);</span><br><span class="line">    &#125;</span><br><span class="line">    lastCode = code;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>其他无用代码</strong></p>
+<p>例如<code>mv a1, a1</code>等</p>
+<h2 id="Thanks"><a href="#Thanks" class="headerlink" title="Thanks"></a>Thanks</h2><p>感谢南京大学软件学院的编译原理课程，给了我们参加这类比赛的能力与勇气。</p>
+<p>感谢冯洋老师的指导与比赛全程给我们的支持。</p>
+<p>感谢队友陈欣怡、黄炜、倪匀博，大家的共同努力才有这个项目的成果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>喜欢我分享的内容，可以请我一杯饮料~</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Bofan Xie 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="Bofan Xie 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"># 编译器</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/16/javaRules/" rel="prev" title="Java编程规范">
+                  <i class="fa fa-chevron-left"></i> Java编程规范
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bofan Xie</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"nboxff","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
