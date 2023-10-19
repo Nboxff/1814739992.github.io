@@ -2245,4 +2245,31 @@ x^{21} = x^{16} * x^4 * x^1</script><p><img src="https://s1.ax1x.com/2023/03/29/
         <tag>编译器</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Typora主题推荐与修改</title>
+    <url>/2023/10/19/typora-theme/</url>
+    <content><![CDATA[<h2 id="Typora-主题介绍"><a href="#Typora-主题介绍" class="headerlink" title="Typora 主题介绍"></a>Typora 主题介绍</h2><p>Typora作为轻量级的Markdown语言编辑器，深受广大用户喜爱。在Typora中，提供了<code>Github</code>，<code>Newsprint</code>等内置主题，可渲染出不同的、漂亮的文档。</p>
+<p>除此之外，Typora官网还提供了更多主题供用户免费下载：</p>
+<blockquote>
+<p>更多主题： <a href="https://theme.typoraio.cn/">Themes Gallery — Typora (typoraio.cn)</a></p>
+</blockquote>
+<p>Typora主题文件就是一个<strong>CSS文件</strong>，因此我们可以很轻松的修改/编写自己的主题。</p>
+<h2 id="Typora中Latex-主题推荐"><a href="#Typora中Latex-主题推荐" class="headerlink" title="Typora中Latex 主题推荐"></a>Typora中Latex 主题推荐</h2><blockquote>
+<p>项目地址：<a href="https://github.com/Keldos-Li/typora-latex-theme">https://github.com/Keldos-Li/typora-latex-theme</a></p>
+</blockquote>
+<p>该主题初衷是为了简化中国大陆本科生<strong>小型通识课论文</strong>的撰写，生成Latex主题很符合我的审美。Github仓库提供了效果展示和安装说明，这里不再赘述。</p>
+<span id="more"></span>
+<h2 id="修改主题配置"><a href="#修改主题配置" class="headerlink" title="修改主题配置"></a>修改主题配置</h2><p><center><b>叠甲：每个人的主观审美没有对错</b></center><br>Latex主题有几个地方让我不太满意，于是手动修改了部分CSS代码：</p>
+<h3 id="小标题字体"><a href="#小标题字体" class="headerlink" title="小标题字体"></a>小标题字体</h3><p>问题：中文小标题字体太细，希望换成<code>华文中宋</code>字体</p>
+<p>解决：在<code>:root &#123;&#125;</code>中进行如下修改</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line"><span class="comment">/* 未修改的代码，略去 */</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">/* 标题字体（总设置） */</span></span><br><span class="line">  <span class="attr">--heading-Latin-font</span>: <span class="built_in">var</span>(--base-Latin-font);</span><br><span class="line">  <span class="attr">--heading-Chinese-font</span>: <span class="string">&quot;华文中宋&quot;</span>;</span><br><span class="line">  <span class="comment">/* 标题字体分别设置 */</span></span><br><span class="line">  <span class="comment">/* 大标题（h1）字体 */</span></span><br><span class="line">  <span class="attr">--title-Chinese-font</span>: <span class="string">&quot;华文中宋&quot;</span>;</span><br><span class="line">  <span class="attr">--title-font-size</span>: <span class="number">1.9em</span>;</span><br><span class="line">  <span class="comment">/* h2字体 */</span></span><br><span class="line">  <span class="attr">--h2-Chinese-font</span>: <span class="string">&quot;华文中宋&quot;</span>;</span><br><span class="line">  <span class="attr">--h2-font-size</span>: <span class="number">1.5em</span>;</span><br><span class="line">  <span class="comment">/* h3字体 */</span></span><br><span class="line">  <span class="attr">--h3-Chinese-font</span>: <span class="string">&quot;华文中宋&quot;</span>;</span><br><span class="line">  <span class="attr">--h3-font-size</span>: <span class="number">1.25em</span>;</span><br><span class="line">  <span class="comment">/* h4字体 */</span></span><br><span class="line">  <span class="attr">--h4-Chinese-font</span>: <span class="string">&quot;华文中宋&quot;</span>;</span><br><span class="line">  <span class="attr">--h4-font-size</span>: <span class="number">1.15em</span>;</span><br><span class="line">  <span class="comment">/* h5字体 */</span></span><br><span class="line">  <span class="attr">--h5-Chinese-font</span>: <span class="string">&quot;华文仿宋&quot;</span>;</span><br><span class="line">  <span class="attr">--h5-font-size</span>: <span class="number">1.10em</span>;</span><br><span class="line">  <span class="comment">/* h6字体 */</span></span><br><span class="line">  <span class="attr">--h6-Chinese-font</span>: <span class="string">&quot;华文仿宋&quot;</span>;</span><br><span class="line">  <span class="attr">--h6-font-size</span>: <span class="number">1.05em</span>;</span><br><span class="line">    </span><br><span class="line"><span class="comment">/* 未修改的代码，略去 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="表格撑满与居中"><a href="#表格撑满与居中" class="headerlink" title="表格撑满与居中"></a>表格撑满与居中</h3><p>Latex主题作者不希望表格撑满页面，但我发现我下载下来以后表格不能正确居中，而是居左。（如果您能告诉我这个原因，欢迎邮件告诉我：211250137@smail.nju.edu.cn）</p>
+<p>于是做出以下修改：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#write</span> <span class="selector-tag">table</span> &#123;</span><br><span class="line">  <span class="attribute">border-top</span>: <span class="number">1.2pt</span> solid;</span><br><span class="line">  <span class="attribute">border-bottom</span>: <span class="number">1.2pt</span> solid;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="built_in">var</span>(--table-font), <span class="built_in">var</span>(--base-Latin-font), <span class="built_in">var</span>(--base-Chinese-font), serif;</span><br><span class="line">  <span class="comment">/* font-size: var(--base-font-size); */</span></span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">  <span class="attribute">page-break-inside</span>: avoid;</span><br><span class="line">  <span class="attribute">border-spacing</span>: <span class="number">6px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h3><p><img src="/images/image-20231019153834636.png" alt="image-20231019153834636"></p>
+]]></content>
+      <tags>
+        <tag>软件技巧</tag>
+      </tags>
+  </entry>
 </search>
