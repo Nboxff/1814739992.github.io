@@ -2272,4 +2272,40 @@ x^{21} = x^{16} * x^4 * x^1</script><p><img src="https://s1.ax1x.com/2023/03/29/
         <tag>软件技巧</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Ubuntu开机进入grub界面解决</title>
+    <url>/2023/10/26/grub/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>准备打开我的Ubuntu虚拟机进行愉快的编程时，发现Ubuntu系统进入了GRUB界面，那天正好时1024程序员节，这份特殊的礼物真让人<del>喜欢</del>崩溃。</p>
+<p><img src="/images/UbuntuGRUB.png" alt="Ubuntu GRUB"></p>
+<p>猜测一下原因：可能是开着虚拟机的时候电脑蓝屏，导致grub文件收到损坏了</p>
+<span id="more"></span>
+<h2 id="解决：加载内核进入系统"><a href="#解决：加载内核进入系统" class="headerlink" title="解决：加载内核进入系统"></a>解决：加载内核进入系统</h2><h3 id="确定分区"><a href="#确定分区" class="headerlink" title="确定分区"></a>确定分区</h3><ol>
+<li><p>输入<code>ls</code>命令，查看当前的分区设备，得到如下结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(proc) (hd0) (hd0,msdos5) (hd0,msdos1)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输入<code>set root=(hd0,m)</code>并按下tab键，弹出分区的详细信息。</p>
+<p><strong>或者</strong>通过<code>ls (hd0,msdos5)/boot/grub</code>尝试找到包含grub.cfg文件的分区，该分区是Linux安装的分区。经确认，(hd0,msdos5)是是Linux安装的分区。</p>
+</li>
+<li><p>输入<code>set root=(hd0,msdos5)</code>设置使用的根分区</p>
+</li>
+<li><p>输入<code>set prefix=(hd0,msdos5)/boot/grub</code>设置启动路径</p>
+</li>
+</ol>
+<h3 id="找Linux-根分区所在磁盘位置"><a href="#找Linux-根分区所在磁盘位置" class="headerlink" title="找Linux /根分区所在磁盘位置"></a>找Linux /根分区所在磁盘位置</h3><p>输入<code>cat (hd0,msdos5)/etc/fstab</code></p>
+<p><img src="/images/image-20231026170344792.png" alt="image-20231026170344792"></p>
+<p>发现<code>/</code>在<strong>dev/sda5</strong>上</p>
+<h3 id="指定Linux内核"><a href="#指定Linux内核" class="headerlink" title="指定Linux内核"></a>指定Linux内核</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">linux /boot/vmlinuz root=/dev/sda5</span><br></pre></td></tr></table></figure>
+<h3 id="指定initrd文件"><a href="#指定initrd文件" class="headerlink" title="指定initrd文件"></a>指定initrd文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">initrd /boot/initrd.img</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>备注：你的vmlinuz和initrd的位置和名称可能有所不同</p>
+</blockquote>
+<h3 id="引导系统"><a href="#引导系统" class="headerlink" title="引导系统"></a>引导系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">boot</span><br></pre></td></tr></table></figure>
+<p>现在，终于又可以进入Ubuntu系统了，撒花。</p>
+<p><img src="/images/image-20231026171101182.png" alt="image-20231026171101182"></p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>重启后有要进入grub界面，如果有人知道如何不用每次都加载内核，请邮件我呜呜。</p>
+]]></content>
+      <tags>
+        <tag>Linux系统</tag>
+      </tags>
+  </entry>
 </search>
